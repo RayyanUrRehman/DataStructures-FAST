@@ -68,7 +68,7 @@ void delete_specific_data(node* &head, int data)
             current = current->prev;
         }
         else{
-            // current = current->next;
+            current = current->next;
         }
     }
 }   
