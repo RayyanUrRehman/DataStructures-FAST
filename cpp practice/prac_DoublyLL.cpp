@@ -50,7 +50,27 @@ void display_end_to_start(node* &head)
 
 void delete_specific_data(node* &head, int data)
 {   
-    
+    node* current = head;
+
+    while(current != NULL){
+        if(current->data == data && current->next == nullptr){
+            current = current->prev;
+            current->next = NULL; 
+        }
+        else if(current->data == data && current->prev == nullptr){
+            head = current->next;
+            current = current->next;
+            current->prev = NULL;
+        }
+        else if(current->data == data){
+            current->prev->next = current->next;
+            current->next->prev = current->prev;
+            current = current->prev;
+        }
+        else{
+            // current = current->next;
+        }
+    }
 }   
 
 int main()
@@ -63,8 +83,8 @@ int main()
     add_at_end(head,40);
     displayLL(head);
     cout<<endl;
-    display_end_to_start(head);
-
+    delete_specific_data(head,10);
+    displayLL(head);
 
     
     return 0;
