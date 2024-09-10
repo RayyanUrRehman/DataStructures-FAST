@@ -95,11 +95,11 @@ int main()
     node* head = node1;
 
     // Constructing linked list
-    // insert_end(head, 1);
+    insert_end(head, 1);
     insert_end(head, 2);
-    // insert_end(head, 3);
+    insert_end(head, 3);
     insert_end(head, 4);
-    // insert_end(head, 5);
+    insert_end(head, 5);
 
     cout << "Original Linked List: "<<endl;
     displayLL(head);
