@@ -2,9 +2,9 @@
 using namespace std;
 
 
-void shellSort (int myarr[], int size) {
-    for (int gap = size / 2; gap > 0; gap /= 1.5) {
-        for (int j= gap; j< size; j++) {
+void shellSort(int myarr[], int size){
+    for (int gap = size / 2; gap > 0; gap /= 1.5){
+        for (int j= gap; j< size; j++){
             int temp = myarr[j];
             int res = j;
             while(res >= gap && myarr[res-gap]>temp){
