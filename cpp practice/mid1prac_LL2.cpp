@@ -46,13 +46,42 @@ void insert_end(node* head, int data)
 }
 
 
-void reverse_specific(node* head, int start, int end)
+void reverse_specific(node* head, int start, int end)       //has some errors
 {   
+    node* nextNode;
+    node* prevNode;
+    node* current = head;
+
+    int pos = 1;
+    while(pos != start){
+        prevNode = current;
+        current = current->next;
+        nextNode = current->next;
+        pos++;
+    }
     
+    // Linked List: 1→ 2 → 3 → 4 → 5 → 6 → 7
+
+    int count = pos;
+    while(count != end){
+        node* temp = nextNode->next;
+        prevNode->next = current->next;
+        nextNode->next = current;
+        current->next = temp;
+        count++;        
+    }
+
 }
 
 int main()
 {
-
+    node* node1 = new node(10);
+    node* head = node1;
+    insert_end(head,20);
+    insert_end(head,30);
+    insert_end(head,40);
+    insert_end(head,50);
+    reverse_specific(head,2,4);
+    displayLL(head);
     return 0;
 }
