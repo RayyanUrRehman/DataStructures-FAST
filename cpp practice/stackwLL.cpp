@@ -54,6 +54,17 @@ class stack
         }
     }
 
+    int sum()
+    {
+        node* current = top;
+        int sum=0;
+        while(current != nullptr){
+            sum += current->data;
+            current = current->prev;
+        }
+        return sum;
+    }
+
 };
 
 
@@ -70,6 +81,8 @@ int main()
 
     Stack.push(50);
     Stack.display();
+    cout<<endl;
+    cout<<"Sum of entire stack is: "<<Stack.sum();
 
     
 
