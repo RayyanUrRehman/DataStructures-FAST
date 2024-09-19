@@ -134,7 +134,7 @@ void search_data(node* &head, int data)
 }
 
 
-void remove_duplicate(node* &head)
+void remove_duplicate(node* &head)  //for sorted LL
 {
     node* current = head;
 

@@ -1,0 +1,1 @@
+temp->next = current2->next;
