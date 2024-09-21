@@ -33,5 +33,6 @@ int main()
     int arr[5] = {1,2,3,4,5};
     interpolationSearch(arr,5,3);
 
+
     return 0;
 }
