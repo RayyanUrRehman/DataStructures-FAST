@@ -1,5 +1,7 @@
 #include<iostream>
 using namespace std;
+#include <ctime>    // For time()
+
 
 // Assume you are developing a program to simulate a game where players take turns to guess a
 // number between 1 and 100. The program generates a random number between 1 and 100 at
@@ -21,9 +23,9 @@ void game(int target, int player)
         }
         else{
             if (guess < target)
-                cout<<"Guess low"<<endl;
+                cout<<"Guess is low"<<endl;
             else{
-                cout<<"Guess high"<<endl;
+                cout<<"Guess is high"<<endl;
             }
             return game(target,2);
         }
@@ -39,9 +41,9 @@ void game(int target, int player)
         }
         else{
             if (guess < target)
-                cout<<"Guess low"<<endl;
+                cout<<"Guess is low"<<endl;
             else{
-                cout<<"Guess high"<<endl;
+                cout<<"Guess is high"<<endl;
             }
             return game(target, 1);
         }
@@ -53,6 +55,7 @@ void game(int target, int player)
 
 int main()
 {
+    srand(time(0));
     int max = 100; int min = 1;
     int target = (rand() % (max - min + 1)) + min;
 
