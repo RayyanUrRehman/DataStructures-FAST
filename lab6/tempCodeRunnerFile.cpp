@@ -1,0 +1,9 @@
+stack.push("B");
+    stack.push("O");
+    stack.push("R");
+    stack.push("R");
+    stack.push("O");
+    stack.push("R");
+    stack.push("R");
+    stack.push("O");
+    stack.push("B");
