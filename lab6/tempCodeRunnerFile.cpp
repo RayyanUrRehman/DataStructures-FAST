@@ -1,9 +1,2 @@
-stack.push("B");
-    stack.push("O");
-    stack.push("R");
-    stack.push("R");
-    stack.push("O");
-    stack.push("R");
-    stack.push("R");
-    stack.push("O");
-    stack.push("B");
+
+// Implement a Queue based approach where assume you are the cashier in a supermarket and

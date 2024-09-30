@@ -1,6 +1,10 @@
 #include<iostream>
 using namespace std;
 
+// Implement and insert the values “BORROWROB” in the stack and identify if it’s palindrome
+// or not. Use the push and pop functions to accomplish this (Note: Use Arrays to accomplish
+// this).
+
 int maxsize = 10;
 class Stack
 {
@@ -124,15 +128,15 @@ int main()
 
 
     // test for not a palindrome (original question)
-    // stack.push("B");
-    // stack.push("O");
-    // stack.push("R");
-    // stack.push("R");
-    // stack.push("O");
-    // stack.push("W");
-    // stack.push("R");
-    // stack.push("O");
-    // stack.push("B");
+    stack.push("B");
+    stack.push("O");
+    stack.push("R");
+    stack.push("R");
+    stack.push("O");
+    stack.push("W");
+    stack.push("R");
+    stack.push("O");
+    stack.push("B");
 
 
     stack.isPalindrome();

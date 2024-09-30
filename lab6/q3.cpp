@@ -86,7 +86,7 @@ int main() {
     cout<<endl<< "Stack before evaluation:"<<endl<<endl;
     stack.display();
 
-    double result = evaluateExpression();
+    int result = evaluateExpression();
 
     stack.push(to_string(result));
 

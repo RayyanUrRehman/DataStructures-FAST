@@ -1,6 +1,10 @@
 #include<iostream>
 using namespace std;
 
+// Implement a Queue based approach where assume you are the cashier in a supermarket and
+// you need to make checkouts. Customer ID’s Are 13,7,4,1,6,8,10. (Note: Use Arrays to
+// accomplish this task with enqueue and dequeue).
+
 int Qsize = 10;
 class Queue
 {
