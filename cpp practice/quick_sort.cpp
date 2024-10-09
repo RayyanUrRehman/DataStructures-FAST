@@ -10,6 +10,7 @@ void swap(int* arr,int a, int b)
 }
 
 
+
 int partition(int* arr, int s, int e)
 {
     int pivot = arr[s];
