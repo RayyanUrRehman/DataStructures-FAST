@@ -59,8 +59,17 @@ void quickSort(int* arr, int s, int e)
 
 int main()
 {
-    int arr[11] = {6, 3, 9, 1, 4, 4, 44, 2, 21, 60, 43};
-    int n = 11;
+    int n;
+    cout<<"Enter number of elements ";
+    cin>>n;
+
+    int* arr = new int[n];
+
+    cout<<"Enter elements: "<<endl;
+
+    for (int i = 0; i < n; i++){
+        cin>>arr[i];
+    }
 
     quickSort(arr, 0, n - 1);
 
