@@ -25,6 +25,7 @@ void display(int arr[],int size)
 }
 
 
+
 int main()
 {
     int arr[6] = {5,4,2,8,9,1};
