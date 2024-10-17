@@ -76,7 +76,7 @@ void delete_specific_data(node* &head, int data)
 int main()
 {
     node* node1 = new node(10);
-    node* head = node1;
+    node* head = node1; 
 
     add_at_end(head,20);
     add_at_end(head,30);
