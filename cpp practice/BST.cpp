@@ -7,7 +7,7 @@ class node
     public:
     int data;
     node* right;
-    node* left;
+    node* left; 
 };
 
 
