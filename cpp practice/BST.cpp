@@ -75,7 +75,6 @@ node* minVal(node* root)
 
 node* Delete(node* root, int data)
 {
-    node* temp;
     if (root == NULL){
         return root;
     }
@@ -90,27 +89,34 @@ node* Delete(node* root, int data)
         //1 child
         //for left child
         if (root->right==NULL && root->left!=NULL){
-            temp = root->left;
+            node* temp = root->left;
             delete root;
             return temp;
         }
 
         //for right child
         if (root->left==NULL && root->right!=NULL){
-            temp = root->right;
+            node* temp = root->right;
             delete root;
             return temp;
         }
 
         //2child
-        
+        if (root->left != NULL && root->right != NULL){
+            int mini = minVal(root->right)->data;
+            root->data = mini;
+            root->right = Delete(root->right, mini);
+            return root;
+        }
 
     }
     else if(data < root->data){
-        return Delete(root->left, data);
+        root->left =  Delete(root->left, data);
+        return root;
     }
     else{
-        return Delete(root->right, data);
+        root->right =  Delete(root->right, data);
+        return root;
     }
 }
 
@@ -157,10 +163,15 @@ int main()
     // int target;
     // cin>>target;
     // search(root, target);
-    cout<<endl;
-    cout<<endl;
-    maxVal(root);
-    minVal(root);
+    // cout<<endl;
+    // cout<<endl;
+    // maxVal(root);
+    // minVal(root);
+
+    cout<<endl<<"Enter value to delete: ";
+    int num; cin>>num;
+    Delete(root,num);
+    print(root);
 
     return 0;
 }
