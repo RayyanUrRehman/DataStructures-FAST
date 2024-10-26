@@ -32,6 +32,10 @@ void print(node* root) {
 
 bool search(node* root, int target)
 {
+    if (root == NULL){
+        cout<<"Target not found"<<endl;
+        return false;
+    }
     if (root->data == target){
         cout<<"Target found"<<endl;
         return true;
@@ -44,6 +48,28 @@ bool search(node* root, int target)
         search(root->right, target);
     }
     
+}
+
+node* maxVal(node* root)
+{
+    if (root->right == NULL){
+        cout<<"Largest element is: "<<root->data<<endl;
+        return root;
+    }
+    else{
+        root = maxVal(root->right);
+    }
+}
+
+node* minVal(node* root)
+{
+    if (root->left == NULL){
+        cout<<"Smallest element is: "<<root->data<<endl;
+        return root;
+    }
+    else{
+        root = minVal(root->left);
+    }
 }
 
 
@@ -85,10 +111,14 @@ int main()
     cout<<"Printing: "<<endl;
     print(root);
     
-    cout<<endl<<"Enter value to search in BST:";
-    int target;
-    cin>>target;
-    search(root, target);
+    // cout<<endl<<"Enter value to search in BST:";
+    // int target;
+    // cin>>target;
+    // search(root, target);
+    cout<<endl;
+    cout<<endl;
+    maxVal(root);
+    minVal(root);
 
     return 0;
 }
