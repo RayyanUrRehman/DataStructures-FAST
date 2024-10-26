@@ -73,6 +73,48 @@ node* minVal(node* root)
 }
 
 
+node* Delete(node* root, int data)
+{
+    node* temp;
+    if (root == NULL){
+        return root;
+    }
+    
+    if (root->data == data){
+        //0 child
+        if (root->right==NULL && root->left==NULL){
+            delete root;
+            return NULL;
+        }
+
+        //1 child
+        //for left child
+        if (root->right==NULL && root->left!=NULL){
+            temp = root->left;
+            delete root;
+            return temp;
+        }
+
+        //for right child
+        if (root->left==NULL && root->right!=NULL){
+            temp = root->right;
+            delete root;
+            return temp;
+        }
+
+        //2child
+        
+
+    }
+    else if(data < root->data){
+        return Delete(root->left, data);
+    }
+    else{
+        return Delete(root->right, data);
+    }
+}
+
+
 node* insertInBST(node* &root, int data)
 {
     if (root == NULL){
