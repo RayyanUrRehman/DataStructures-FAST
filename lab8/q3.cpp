@@ -1,98 +1,126 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
 
-
-class node
-{
-    public:
+class node {
+public:
     int data;
-    node* right; 
+    node* right;
     node* left;
 
-    node(int d){
+    node(int d) {
         data = d;
         right = NULL;
         left = NULL;
     }
-
 };
 
-
-node* print(node* root)
-{   
-    if (root == NULL){
-        return root;
+void print(node* root) {
+    if (root == NULL) {
+        return;
     }
-    else{
-        root->left = print(root->left);
-        cout<<root->data<<" ";
-        root->right = print(root->right);
-    }
+    print(root->left);
+    cout << root->data << " ";
+    print(root->right);
 }
 
-node* insertInBST(node* &root, int data)
-{
-    if (root == NULL){
+node* insertInBST(node* &root, int data) {
+    if (root == NULL) {
         root = new node(data);
         return root;
     }
-
-    if(data < root->data){
-        root->left = insertInBST(root->left, data);
-        return root;
-    }
-    else{
+    if (data > root->data) {
         root->right = insertInBST(root->right, data);
-        return root;
+    } else {
+        root->left = insertInBST(root->left, data);
     }
-}
-
-bool search(node* &root, int target)
-{
-    if (root == NULL){
-        cout<<"Target not found. Inserting target at right place"<<endl;
-        root = insertInBST(root, target);
-        return false;
-    }
-    if (root->data == target){
-        cout<<"Target found."<<endl;
-        return true;
-    }
-
-    if(target < root->data){
-        search(root->left, target);
-    }
-    else{
-        search(root->right, target);
-    }
+    return root;
 }
 
 
-void takeInput(node* &root)
-{
-    int data;
-    cout<<"Enter data: ";
-    cin>>data;
+int countNodes(node* root) {
+    if (root == NULL) return 0;
+    return 1 + countNodes(root->left) + countNodes(root->right);
+}
 
-    while(data != -1){
-        root = insertInBST(root,data);
-        cin>>data;
+
+bool isCompleteBinaryTree(node* root, int index, int nodeCount) {
+    if (root == NULL) return true;
+
+    if (index >= nodeCount) return false;
+
+    return isCompleteBinaryTree(root->left, 2 * index + 1, nodeCount) &&
+           isCompleteBinaryTree(root->right, 2 * index + 2, nodeCount);
+}
+
+node* adjustTreeToCompleteAndFull(node* root) {
+    if (root == NULL) return NULL;
+
+    if ((root->left == NULL && root->right != NULL) || (root->left != NULL && root->right == NULL)) {
+        node* temp = (root->left != NULL) ? root->left : root->right;
+        delete root;
+        return temp;
+    }
+
+    root->left = adjustTreeToCompleteAndFull(root->left);
+    root->right = adjustTreeToCompleteAndFull(root->right);
+    return root;
+}
+
+
+bool searchAndInsert(node* &root, int target, int &level, string &position, int currentLevel = 0) {
+    if (root == NULL) {
+        
+        root = new node(target);
+        level = currentLevel;
+        position = "Inserted as " + string(currentLevel == 0 ? "root" : "child");
+        return false; 
+    }
+    
+    if (root->data == target) {
+        level = currentLevel;
+        position = "Found at " + string(currentLevel == 0 ? "root" : currentLevel % 2 == 0 ? "right child" : "left child");
+        return true; 
+    }
+    
+    if (target < root->data) {
+        return searchAndInsert(root->left, target, level, position, currentLevel + 1);
+    } else {
+        return searchAndInsert(root->right, target, level, position, currentLevel + 1);
     }
 }
 
 
-int main()
-{
+void createBSTFromArray(node* &root, int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        insertInBST(root, arr[i]);
+    }
+}
+
+int main() {
     node* root = NULL;
-    takeInput(root);
-    cout<<"Printing BST in inorder: "<<endl;
-    print(root);
+    int arr[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    int n = sizeof(arr) / sizeof(arr[0]);
 
-    int target;
-    cout<<"Enter value to find: ";
-    cin>>target;
-    search(root, target);
-    cout<<endl;
+    createBSTFromArray(root, arr, n);
+
+    cout << "In-order traversal of the BST after insertions: ";
     print(root);
+    cout << endl;
+
+    
+    cout << "Enter value to search in the BST: ";
+    int target;
+    cin >> target;
+
+    int level = -1;
+    string position;
+    bool found = searchAndInsert(root, target, level, position);
+
+    if (found) {
+        cout << "Value " << target << " " << position << " at level " << level << "." << endl;
+    } else {
+        cout << "Value " << target << " not found. " << position << " at level " << level << "." << endl;
+    }
+
     return 0;
 }
