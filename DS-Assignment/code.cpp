@@ -9,98 +9,98 @@
 
 using namespace std;
 
-class Tickets {
+class tickets {
 public:
-    int ticket_id;
-    string cust_name;
+    int ticketId;
+    string customerName;
     int priority;
-    string request_des;
-    time_t creation_time;  
-    string creation_time_str; 
+    string request;
+    time_t creationTime;  
+    string creationTimestr; 
     bool status;
-    string close_time;
-    Tickets* next;
+    string closeTime;
+    tickets* next;
 
-    Tickets() {}
+    tickets() {}
 
-    Tickets(int id, string n, int p, string des, bool s)
-        : ticket_id(id), cust_name(n), priority(p), request_des(des), status(s), next(nullptr) {
-        time(&creation_time);  
-        creation_time_str = ctime(&creation_time);
-        close_time = ""; 
+    tickets(int id, string n, int p, string des, bool s)
+        : ticketId(id), customerName(n), priority(p), request(des), status(s), next(nullptr) {
+        time(&creationTime);  
+        creationTimestr = ctime(&creationTime);
+        closeTime = ""; 
     }
 };
 
-class Linked_list_Tickets {
+class LLtickets {
 public:
-    Tickets* head;
+    tickets* head;
 
-    Linked_list_Tickets() {
+    LLtickets() {
         head = nullptr;
     }
-    bool ticket_exists(int id) {
-        Tickets* temp = head;
+    bool ticketExists(int id) {
+        tickets* temp = head;
         while (temp != nullptr) {
-            if (temp->ticket_id == id) return true;
+            if (temp->ticketId == id) return true;
             temp = temp->next;
         }
         return false;
     }
-    void add_ticket(int id, string n, int p, string req, bool status) {
-        Tickets* newticket = new Tickets(id, n, p, req, status);
+    void addTicket(int id, string n, int p, string req, bool status) {
+        tickets* newticket = new tickets(id, n, p, req, status);
         if (head == nullptr) {
             head = newticket;
         } else {
-            Tickets* temp = head;
+            tickets* temp = head;
             while (temp->next != nullptr) {
                 temp = temp->next;
             }
             temp->next = newticket;
         }
-        cout << "Ticket added with ID: " << newticket->ticket_id << endl;
+        cout << "Ticket added with ID: " << newticket->ticketId << endl;
     }
 
-    void delete_ticket(int id) {
+    void deleteTicket(int id) {
         if (head == nullptr) {
             cout << "No tickets to delete.\n";
             return;
         }
 
-        if (head->ticket_id == id) {
-            Tickets* del = head;
+        if (head->ticketId == id) {
+            tickets* del = head;
             head = head->next;
             delete del;
             cout << "Ticket with ID " << id << " deleted.\n";
             return;
         }
 
-        Tickets* temp = head;
-        while (temp->next != nullptr && temp->next->ticket_id != id) {
+        tickets* temp = head;
+        while (temp->next != nullptr && temp->next->ticketId != id) {
             temp = temp->next;
         }
 
         if (temp->next == nullptr) {
             cout << "Ticket with ID " << id << " not found.\n";
         } else {
-            Tickets* del = temp->next;
+            tickets* del = temp->next;
             temp->next = temp->next->next;
             delete del;
             cout << "Ticket with ID " << id << " deleted.\n";
         }
     }
 
-    void search_ticket(int id) {
-        Tickets* temp = head;
+    void searchTicket(int id) {
+        tickets* temp = head;
         while (temp != nullptr) {
-            if (temp->ticket_id == id) {
-                cout << "Ticket ID: " << temp->ticket_id << endl;
-                cout << "Customer Name: " << temp->cust_name << endl;
+            if (temp->ticketId == id) {
+                cout << "Ticket ID: " << temp->ticketId << endl;
+                cout << "Customer Name: " << temp->customerName << endl;
                 cout << "Priority: " << temp->priority << endl;
-                cout << "Request Description: " << temp->request_des << endl;
-                cout << "Creation Time: " << temp->creation_time_str;
+                cout << "Request Description: " << temp->request << endl;
+                cout << "Creation Time: " << temp->creationTimestr;
                 cout << "Status: " << (temp->status ? "Open" : "Closed") << endl;
                 if (!temp->status) {
-                    cout << "Close Time: " << temp->close_time;
+                    cout << "Close Time: " << temp->closeTime;
                 }
                 return;
             }
@@ -110,45 +110,46 @@ public:
     }
 
     void display() {
-        Tickets* temp = head;
+        tickets* temp = head;
         if (temp == nullptr) {
             cout << "No tickets available.\n";
             return;
         }
         cout << "Displaying tickets details:\n";
         while (temp != nullptr) {
-            cout << "Ticket ID: " << temp->ticket_id << endl;
-            cout << "Customer Name: " << temp->cust_name << endl;
+            cout << "Ticket ID: " << temp->ticketId << endl;
+            cout << "Customer Name: " << temp->customerName << endl;
             cout << "Priority: " << temp->priority << endl;
-            cout << "Request Description: " << temp->request_des << endl;
-            cout << "Creation Time: " << temp->creation_time_str; 
+            cout << "Request Description: " << temp->request << endl;
+            cout << "Creation Time: " << temp->creationTimestr; 
             cout << "Status: " << (temp->status ? "Open" : "Closed") << endl;
             if (!temp->status) {
-                cout << "Close Time: " << temp->close_time;
+                cout << "Close Time: " << temp->closeTime;
             }
-            cout << "-------------------------------------\n";
+            cout << "-----------------------------\n";
             temp = temp->next;
         }
     }
+
     //merge Sort
-Tickets* sortedMerge(Tickets* a, Tickets* b) {
+tickets* Merge(tickets* a, tickets* b) {
     if (!a) return b;
     if (!b) return a;
 
-    Tickets* result;
-    if (a->ticket_id <= b->ticket_id) {
+    tickets* result;
+    if (a->ticketId <= b->ticketId) {
         result = a;
-        result->next = sortedMerge(a->next, b);
+        result->next = Merge(a->next, b);
     } else {
         result = b;
-        result->next = sortedMerge(a, b->next);
+        result->next = Merge(a, b->next);
     }
     return result;
 }
 
-void frontBackSplit(Tickets* source, Tickets** frontRef, Tickets** backRef) {
-    Tickets* fast = source->next;
-    Tickets* slow = source;
+void Split(tickets* source, tickets** frontRef, tickets** backRef) {
+    tickets* fast = source->next;
+    tickets* slow = source;
 
     while (fast) {
         fast = fast->next;
@@ -162,37 +163,39 @@ void frontBackSplit(Tickets* source, Tickets** frontRef, Tickets** backRef) {
     slow->next = nullptr;
 }
 
-void mergeSort(Tickets** headRef) {
+void mergeSort(tickets** headRef) {
     if (!*headRef || !(*headRef)->next) return;
 
-    Tickets* a;
-    Tickets* b;
-    frontBackSplit(*headRef, &a, &b);
+    tickets* a;
+    tickets* b;
+    Split(*headRef, &a, &b);
 
     mergeSort(&a);
     mergeSort(&b);
 
-    *headRef = sortedMerge(a, b);
+    *headRef = Merge(a, b);
 }
+
+
 //quick sort
-Tickets* getTail(Tickets* node) {
+tickets* getTail(tickets* node) {
     while (node != nullptr && node->next != nullptr) {
         node = node->next;
     }
     return node;
 }
-Tickets* partition(Tickets* head, Tickets* end, Tickets** newHead, Tickets** newEnd) {
-    Tickets* pivot = end;
-    Tickets *prev = nullptr, *cur = head, *tail = pivot;
+tickets* partition(tickets* head, tickets* end, tickets** newHead, tickets** newEnd) {
+    tickets* pivot = end;
+    tickets *prev = nullptr, *cur = head, *tail = pivot;
 
     while (cur != pivot) {
-        if (cur->ticket_id < pivot->ticket_id) {
+        if (cur->ticketId < pivot->ticketId) {
             if (!*newHead) *newHead = cur;
             prev = cur;
             cur = cur->next;
         } else {
             if (prev) prev->next = cur->next;
-            Tickets* temp = cur->next;
+            tickets* temp = cur->next;
             cur->next = nullptr;
             tail->next = cur;
             tail = cur;
@@ -204,40 +207,41 @@ Tickets* partition(Tickets* head, Tickets* end, Tickets** newHead, Tickets** new
     return pivot;
 }
 
-Tickets* quickSortRecur(Tickets* head, Tickets* end) {
+tickets* QSRecur(tickets* head, tickets* end) {
     if (!head || head == end) return head;
 
-    Tickets *newHead = nullptr, *newEnd = nullptr;
-    Tickets* pivot = partition(head, end, &newHead, &newEnd);
+    tickets *newHead = nullptr, *newEnd = nullptr;
+    tickets* pivot = partition(head, end, &newHead, &newEnd);
 
     if (newHead != pivot) {
-        Tickets* temp = newHead;
+        tickets* temp = newHead;
         while (temp->next != pivot) temp = temp->next;
         temp->next = nullptr;
 
-        newHead = quickSortRecur(newHead, temp);
+        newHead = QSRecur(newHead, temp);
         temp = getTail(newHead);
         temp->next = pivot;
     }
 
-    pivot->next = quickSortRecur(pivot->next, newEnd);
+    pivot->next = QSRecur(pivot->next, newEnd);
     return newHead;
 }
 
-void quickSort(Tickets** headRef) {
-    *headRef = quickSortRecur(*headRef, getTail(*headRef));
+void quickSort(tickets** headRef) {
+    *headRef = QSRecur(*headRef, getTail(*headRef));
 }
 
+
 //selection sort
-void selectionSort(Tickets** headRef) {
-    Tickets* temp = *headRef;
+void selectionSort(tickets** headRef) {
+    tickets* temp = *headRef;
 
     while (temp) {
-        Tickets* min = temp;
-        Tickets* r = temp->next;
+        tickets* min = temp;
+        tickets* r = temp->next;
 
         while (r) {
-            if (r->ticket_id < min->ticket_id) min = r;
+            if (r->ticketId < min->ticketId) min = r;
             r = r->next;
         }
         swapNodes(temp, min);
@@ -245,38 +249,39 @@ void selectionSort(Tickets** headRef) {
     }
 }
 
-void swapNodes(Tickets* a, Tickets* b) {
+void swapNodes(tickets* a, tickets* b) {
     if (a != b) {
-        swap(a->ticket_id, b->ticket_id);
-        swap(a->cust_name, b->cust_name);
+        swap(a->ticketId, b->ticketId);
+        swap(a->customerName, b->customerName);
         swap(a->priority, b->priority);
-        swap(a->request_des, b->request_des);
-        swap(a->creation_time, b->creation_time);
-        swap(a->creation_time_str, b->creation_time_str);
+        swap(a->request, b->request);
+        swap(a->creationTime, b->creationTime);
+        swap(a->creationTimestr, b->creationTimestr);
         swap(a->status, b->status);
-        swap(a->close_time, b->close_time);
+        swap(a->closeTime, b->closeTime);
     }
 }
+
 //insertion sort
-void insertionSort(Tickets** headRef) {
-    Tickets* sorted = nullptr;
-    Tickets* current = *headRef;
+void insertionSort(tickets** headRef) {
+    tickets* sorted = nullptr;
+    tickets* current = *headRef;
 
     while (current) {
-        Tickets* next = current->next;
-        sortedInsert(&sorted, current);
+        tickets* next = current->next;
+        insertSorted(&sorted, current);
         current = next;
     }
     *headRef = sorted;
 }
 
-void sortedInsert(Tickets** headRef, Tickets* newNode) {
-    if (!*headRef || (*headRef)->ticket_id >= newNode->ticket_id) {
+void insertSorted(tickets** headRef, tickets* newNode) {
+    if (!*headRef || (*headRef)->ticketId >= newNode->ticketId) {
         newNode->next = *headRef;
         *headRef = newNode;
     } else {
-        Tickets* current = *headRef;
-        while (current->next && current->next->ticket_id < newNode->ticket_id) {
+        tickets* current = *headRef;
+        while (current->next && current->next->ticketId < newNode->ticketId) {
             current = current->next;
         }
         newNode->next = current->next;
@@ -284,84 +289,84 @@ void sortedInsert(Tickets** headRef, Tickets* newNode) {
     }
 }
 
-    void timesort() {
+    void timeSort() {
         if (head == nullptr) return; 
 
-        for (Tickets* temp1 = head; temp1 != nullptr; temp1 = temp1->next) {
-            for (Tickets* temp2 = temp1->next; temp2 != nullptr; temp2 = temp2->next) {
-                if (temp1->creation_time > temp2->creation_time) {
+        for (tickets* temp1 = head; temp1 != nullptr; temp1 = temp1->next) {
+            for (tickets* temp2 = temp1->next; temp2 != nullptr; temp2 = temp2->next) {
+                if (temp1->creationTime > temp2->creationTime) {
                     tswap(temp1, temp2);
                 }
             }
         }
     }
 
-    void namesort() {
+    void nameSort() {
         if (head == nullptr) return;
 
-        for (Tickets* temp1 = head; temp1 != nullptr; temp1 = temp1->next) {
-            for (Tickets* temp2 = temp1->next; temp2 != nullptr; temp2 = temp2->next) {
-                if (temp1->cust_name > temp2->cust_name) {
+        for (tickets* temp1 = head; temp1 != nullptr; temp1 = temp1->next) {
+            for (tickets* temp2 = temp1->next; temp2 != nullptr; temp2 = temp2->next) {
+                if (temp1->customerName > temp2->customerName) {
                     tswap(temp1, temp2);
                 }
             }
         }
     }
 
-    void idsort() {
+    void idSort() {
         if (head == nullptr) return;
 
-        for (Tickets* temp1 = head; temp1 != nullptr; temp1 = temp1->next) {
-            for (Tickets* temp2 = temp1->next; temp2 != nullptr; temp2 = temp2->next) {
+        for (tickets* temp1 = head; temp1 != nullptr; temp1 = temp1->next) {
+            for (tickets* temp2 = temp1->next; temp2 != nullptr; temp2 = temp2->next) {
 
-                if (temp1->ticket_id > temp2->ticket_id) {
+                if (temp1->ticketId > temp2->ticketId) {
                     tswap(temp1, temp2);
                 }
             }
         }
     }
 
-    void tswap(Tickets* a, Tickets* b) {
-        swap(a->ticket_id, b->ticket_id);
-        swap(a->cust_name, b->cust_name);
+    void tswap(tickets* a, tickets* b) {
+        swap(a->ticketId, b->ticketId);
+        swap(a->customerName, b->customerName);
         swap(a->priority, b->priority);
-        swap(a->request_des, b->request_des);
-        swap(a->creation_time, b->creation_time);
-        swap(a->creation_time_str, b->creation_time_str);
+        swap(a->request, b->request);
+        swap(a->creationTime, b->creationTime);
+        swap(a->creationTimestr, b->creationTimestr);
         swap(a->status, b->status);
-        swap(a->close_time, b->close_time);
+        swap(a->closeTime, b->closeTime);
     }
 
     void sort(int p) {
         if (p == 1) {
-            timesort();
+            timeSort();
         } else if (p == 2) {
-            namesort();
+            nameSort();
         } else if (p == 3) {
-            idsort();
+            idSort();
         }
     }
 };
 
 class Agent {
 public:
-    int agent_id;
+    int agentId;
     string name;
-    int* assigned_tickets; 
+    int* assignedTickets; 
     bool availability; 
     int num;              
 
     Agent() {}
 
-    Agent(int id, string n) : agent_id(id), name(n), availability(true), num(0) {
-        assigned_tickets = nullptr; 
+    Agent(int id, string n) : agentId(id), name(n), availability(true), num(0) {
+        assignedTickets = nullptr; 
     }
 
     ~Agent() {
-        delete[] assigned_tickets;
+        delete[] assignedTickets;
     }
 
-    void assign_ticket(int t_ID) {
+    void assignTicket(int t_ID) {
         if (num >= 5) {
             availability = false;
             cout << "Agent " << name << " is at full capacity." << endl;
@@ -370,13 +375,13 @@ public:
 
         int* temp = new int[num + 1];
         for (int i = 0; i < num; i++) {
-            temp[i] = assigned_tickets[i];
+            temp[i] = assignedTickets[i];
         }
 
         temp[num] = t_ID;
 
-        delete[] assigned_tickets;
-        assigned_tickets = temp;
+        delete[] assignedTickets;
+        assignedTickets = temp;
         num++;
 
         if (num >= 5) {
@@ -386,18 +391,18 @@ public:
         cout << "Assigned ticket " << t_ID << " to agent " << name << endl;
     }
 
-    int get_priority_number() const {
+    int getPriorityNumber() const {
         return num;
     }
         void display() const {
-        cout << "Agent ID: " << agent_id << ", Name: " << name << ", Availability: " 
-             << (availability ? "Available" : "Unavailable") << ", Tickets Assigned: ";
+        cout << "Agent ID: " << agentId << ", Name: " << name << ", Availability: " 
+             << (availability ? "Available" : "Unavailable") << ", tickets Assigned: ";
         
         if (num == 0) {
             cout << "None";
         } else {
             for (int i = 0; i < num; i++) {
-                cout << assigned_tickets[i] << (i < num - 1 ? ", " : "");
+                cout << assignedTickets[i] << (i < num - 1 ? ", " : "");
             }
         }
         cout << endl;
@@ -405,65 +410,64 @@ public:
 
 };
 
-class Agent_management {
+class agentManagement {
 public:
     Agent* agents;  
-    int agent_count; 
+    int agentCount; 
 
-    Agent_management() : agent_count(0), agents(nullptr) {}
+    agentManagement() : agentCount(0), agents(nullptr) {}
 
-    ~Agent_management() {
+    ~agentManagement() {
         delete[] agents;
     }
 
-    void add_agent(Agent new_agent) {
-        Agent* temp = new Agent[agent_count + 1];
-        for (int i = 0; i < agent_count; i++) {
+    void addAgent(Agent newAgent) {
+        Agent* temp = new Agent[agentCount + 1];
+        for (int i = 0; i < agentCount; i++) {
             temp[i] = agents[i];
         }
 
-        temp[agent_count] = new_agent;
+        temp[agentCount] = newAgent;
 
         delete[] agents;
         agents = temp;
-        agent_count++;
+        agentCount++;
 
-        cout << "Added agent " << new_agent.name << " (ID: " << new_agent.agent_id << ")" << endl;
+        cout << "Added agent " << newAgent.name << " (ID: " << newAgent.agentId << ")" << endl;
     }
 
-    void assign_ticket_to_agent(int ticket_id) {
-        if (agent_count == 0) {
+    void assignTicketToAgent(int ticketId) {
+        if (agentCount == 0) {
             cout << "No agents available to assign tickets." << endl;
             return;
         }
 
-        int min_tickets = 6; 
-        int chosen_agent_index = -1;
+        int minTickets = 6; 
+        int chosenAgentIndex = -1;
 
-        for (int i = 0; i < agent_count; i++) {
-            if (agents[i].availability && agents[i].get_priority_number() < min_tickets) {
-                min_tickets = agents[i].get_priority_number();
-                chosen_agent_index = i;
+        for (int i = 0; i < agentCount; i++) {
+            if (agents[i].availability && agents[i].getPriorityNumber() < minTickets) {
+                minTickets = agents[i].getPriorityNumber();
+                chosenAgentIndex = i;
             }
         }
 
-        if (chosen_agent_index != -1) {
-            agents[chosen_agent_index].assign_ticket(ticket_id);
+        if (chosenAgentIndex != -1) {
+            agents[chosenAgentIndex].assignTicket(ticketId);
         } else {
-            cout << "No available agents to assign ticket " << ticket_id << endl;
+            cout << "No available agents to assign ticket " << ticketId << endl;
         }
     }
-    void display_all_agents() const {
+    void displayAllAgents() const {
         cout << "Agent Details:" << endl;
-        for (int i = 0; i < agent_count; i++) {
+        for (int i = 0; i < agentCount; i++) {
             agents[i].display();
         }
     }
-        void sort_agents_by_ticket_count() {
-        for (int i = 0; i < agent_count - 1; i++) {
-            for (int j = 0; j < agent_count - i - 1; j++) {
-                if (agents[j].get_priority_number() > agents[j + 1].get_priority_number()) {
-                    // Swap agents
+        void sortAgentsByTicketCount() {
+        for (int i = 0; i < agentCount - 1; i++) {
+            for (int j = 0; j < agentCount - i - 1; j++) {
+                if (agents[j].getPriorityNumber() > agents[j + 1].getPriorityNumber()) {
                     Agent temp = agents[j];
                     agents[j] = agents[j + 1];
                     agents[j + 1] = temp;
@@ -473,10 +477,10 @@ public:
         cout << "Agents sorted by the number of assigned tickets." << endl;
     }
 
-    void sort_agents_by_id() {
-        for (int i = 0; i < agent_count - 1; i++) {
-            for (int j = 0; j < agent_count - i - 1; j++) {
-                if (agents[j].agent_id > agents[j + 1].agent_id) {
+    void sortAgentsById() {
+        for (int i = 0; i < agentCount - 1; i++) {
+            for (int j = 0; j < agentCount - i - 1; j++) {
+                if (agents[j].agentId > agents[j + 1].agentId) {
 
                     Agent temp = agents[j];
                     agents[j] = agents[j + 1];
@@ -486,16 +490,16 @@ public:
         }
         cout << "Agents sorted by Agent ID." << endl;
     }
-        static int binary_search(Agent* agents, int count, int agent_id) {
+        static int binarySearch(Agent* agents, int count, int agentId) {
         int left = 0;
         int right = count - 1;
 
         while (left <= right) {
             int mid = left + (right - left) / 2;
-            if (agents[mid].agent_id == agent_id) {
+            if (agents[mid].agentId == agentId) {
                 return mid; 
             }
-            if (agents[mid].agent_id < agent_id) {
+            if (agents[mid].agentId < agentId) {
                 left = mid + 1;
             } else {
                 right = mid - 1;
@@ -505,24 +509,24 @@ public:
     }
 
 
-    static int interpolation_search(Agent* agents, int count, int agent_id) {
+    static int interpolationSearch(Agent* agents, int count, int agentId) {
         int low = 0, high = count - 1;
 
-        while (low <= high && agent_id >= agents[low].agent_id && agent_id <= agents[high].agent_id) {
+        while (low <= high && agentId >= agents[low].agentId && agentId <= agents[high].agentId) {
             if (low == high) {
-                if (agents[low].agent_id == agent_id) {
+                if (agents[low].agentId == agentId) {
                     return low; 
                 }
                 return -1; 
             }
 
-            int pos = low + ((high - low) / (agents[high].agent_id - agents[low].agent_id) * (agent_id - agents[low].agent_id));
+            int pos = low + ((high - low) / (agents[high].agentId - agents[low].agentId) * (agentId - agents[low].agentId));
 
-            if (agents[pos].agent_id == agent_id) {
+            if (agents[pos].agentId == agentId) {
                 return pos;
             }
 
-            if (agents[pos].agent_id < agent_id) {
+            if (agents[pos].agentId < agentId) {
                 low = pos + 1; 
             } else {
                 high = pos - 1; 
@@ -535,8 +539,8 @@ public:
 class Stack {
 private:
     struct Node {
-        int ticket_id;
-        string resolution_detail;
+        int ticketId;
+        string resolutionDetail;
         Node* next;
     };
 
@@ -554,8 +558,8 @@ public:
     }
 
     void push(int id, string detail) {
-        Node* new_node = new Node{id, detail, top};
-        top = new_node;
+        Node* newNode = new Node{id, detail, top};
+        top = newNode;
     }
 
     void pop() {
@@ -571,7 +575,7 @@ public:
     void display() {
         Node* temp = top;
         while (temp) {
-            cout << "Ticket ID: " << temp->ticket_id << ", Resolution: " << temp->resolution_detail << endl;
+            cout << "Ticket ID: " << temp->ticketId << ", Resolution: " << temp->resolutionDetail << endl;
             temp = temp->next;
         }
     }
@@ -580,8 +584,8 @@ public:
 class Queue {
 private:
     struct Node {
-        int ticket_id;
-        string customer_name;
+        int ticketId;
+        string customerName;
         int priority; 
         Node* next;
     };
@@ -602,7 +606,7 @@ public:
     string returnticketname(int id){
       Node* temp = front;
         while (temp != nullptr) {
-            if (temp->ticket_id == id) return temp->customer_name;
+            if (temp->ticketId == id) return temp->customerName;
             temp = temp->next;
         }
         
@@ -611,28 +615,28 @@ public:
         int returnticketpriority(int id){
       Node* temp = front;
         while (temp != nullptr) {
-            if (temp->ticket_id == id) return temp->priority;
+            if (temp->ticketId == id) return temp->priority;
             temp = temp->next;
         }
         
         return -1;
     }
-    bool ticket_exists(int id) {
+    bool ticketExists(int id) {
         Node* temp = front;
         while (temp != nullptr) {
-            if (temp->ticket_id == id) return true;
+            if (temp->ticketId == id) return true;
             temp = temp->next;
         }
         return false;
     }
     void enqueue(int id) {
-        Node* new_node = new Node{id};
+        Node* newNode = new Node{id};
         if (rear) {
-            rear->next = new_node;
+            rear->next = newNode;
         } else {
-            front = new_node; 
+            front = newNode; 
         }
-        rear = new_node;
+        rear = newNode;
         cout << "Ticket " << id << " added to the queue." << endl;
     }
 
@@ -658,7 +662,7 @@ public:
         }
         cout << "Pending tickets in the queue:" << endl;
         while (temp) {
-            cout << "Ticket ID: " << temp->ticket_id << ", Customer: " << temp->customer_name
+            cout << "Ticket ID: " << temp->ticketId << ", Customer: " << temp->customerName
                  << ", Priority: " << temp->priority << endl;
             temp = temp->next;
         }
@@ -669,14 +673,14 @@ class TicketResolutionLogs {
 private:
 
     struct StackNode {
-        int ticket_id;
-        string resolution_detail;
+        int ticketId;
+        string resolutionDetail;
         StackNode* next;
     };
 
     struct QueueNode {
-        int ticket_id;
-        string customer_name;
+        int ticketId;
+        string customerName;
         int priority;
         QueueNode* next;
     };
@@ -703,14 +707,14 @@ public:
         }
     }
 
-    void logClosedTicket(int ticket_id, const string& resolution_detail) {
-        StackNode* newNode = new StackNode{ticket_id, resolution_detail, stackTop};
+    void logClosedTicket(int ticketId, const string& resolutionDetail) {
+        StackNode* newNode = new StackNode{ticketId, resolutionDetail, stackTop};
         stackTop = newNode;
-        cout << "Ticket " << ticket_id << " resolved and added to resolution log.\n";
+        cout << "Ticket " << ticketId << " resolved and added to resolution log.\n";
     }
 
-    void addTicketToPendingQueue(int ticket_id, const string& customer_name, int priority) {
-        QueueNode* newNode = new QueueNode{ticket_id, customer_name, priority, nullptr};
+    void addTicketToPendingQueue(int ticketId, const string& customerName, int priority) {
+        QueueNode* newNode = new QueueNode{ticketId, customerName, priority, nullptr};
 
         if (!queueFront) { 
             queueFront = queueRear = newNode;
@@ -731,7 +735,7 @@ public:
                 }
             }
         }
-        cout << "Ticket " << ticket_id << " added to pending queue with priority " << priority << ".\n";
+        cout << "Ticket " << ticketId << " added to pending queue with priority " << priority << ".\n";
     }
 
     void viewResolutionLogs() const {
@@ -743,7 +747,7 @@ public:
         cout << "Recent Ticket Resolutions:\n";
         StackNode* temp = stackTop;
         while (temp) {
-            cout << "Ticket ID: " << temp->ticket_id << ", Resolution: " << temp->resolution_detail << endl;
+            cout << "Ticket ID: " << temp->ticketId << ", Resolution: " << temp->resolutionDetail << endl;
             temp = temp->next;
         }
     }
@@ -754,10 +758,10 @@ public:
             return;
         }
 
-        cout << "Pending Tickets:\n";
+        cout << "Pending tickets:\n";
         QueueNode* temp = queueFront;
         while (temp) {
-            cout << "Ticket ID: " << temp->ticket_id << ", Customer: " << temp->customer_name
+            cout << "Ticket ID: " << temp->ticketId << ", Customer: " << temp->customerName
                  << ", Priority: " << temp->priority << endl;
             temp = temp->next;
         }
@@ -773,30 +777,31 @@ public:
         if (!queueFront) {  
             queueRear = nullptr;
         }
-        cout << "Ticket " << temp->ticket_id << " dequeued from pending queue.\n";
+        cout << "Ticket " << temp->ticketId << " dequeued from pending queue.\n";
         delete temp; 
     } 
 };
 
-void management_function(Linked_list_Tickets &ticket_list, Agent_management &agent_management, Stack &resolution_stack, Queue &pending_tickets, TicketResolutionLogs &ticketresolutionlog) {
-    cout << "SYED MUHIB ALI ZAIDI (23K-2030)\n";
+void managementFunction(LLtickets &ticketList, agentManagement &agentManagement, Stack &resolutionStack, Queue &pendingTickets, TicketResolutionLogs &ticketresolutionlog) {
+    cout << "RAYYAN UR REHMAN\n";
+    cout << "23K-0634\n";
     cout << "************************************************************************************************\n";
     cout << "________________________________________________________________________________________________\n\n";
-    cout << "---------------------------------WELCOME TO ONE-STOP OF FAST NU---------------------------------\n";
+    cout << "---------------------------------WELCOME TO ONE-STOP FAST NU---------------------------------\n";
     cout << "________________________________________________________________________________________________\n";
     int choice;
     while (true) {
         cout << "________________________________________________________________________________________________\n";
         cout << "(1). Add Ticket" << endl;
-        cout << "(2). Display Tickets" << endl;
+        cout << "(2). Display tickets" << endl;
         cout << "(3). Add Agent" << endl;
         cout << "(4). Assign Ticket to Agent" << endl;
         cout << "(5). Enqueue Pending Ticket" << endl;
         cout << "(6). Dequeue Pending Ticket" << endl;
         cout << "(7). Log Resolution" << endl;
         cout << "(8). Display Resolution Logs" << endl;
-        cout << "(9). Display Pending Tickets" << endl;
-        cout << "(10). Remove Tickets" << endl;
+        cout << "(9). Display Pending tickets" << endl;
+        cout << "(10). Remove tickets" << endl;
         cout << "(11). Sort by Priority (1, 2, or 3)" << endl;
         cout<<"(12) Display Agent details \n";
         cout<<"(13) Sort agents\n";
@@ -807,95 +812,95 @@ void management_function(Linked_list_Tickets &ticket_list, Agent_management &age
 
         switch (choice) {
             case 1: {
-                int ticket_id, priority;
-                string customer_name, request_description;
+                int ticketId, priority;
+                string customerName, requestDescription;
                 cout << "Enter Ticket ID: ";
-                cin >> ticket_id;
+                cin >> ticketId;
                 cout << "Enter Customer Name: ";
-                cin >> customer_name;
+                cin >> customerName;
                 cout << "Enter Request Description: ";
                 cin.ignore();
-                getline(cin, request_description);
-                ticket_list.add_ticket(ticket_id, customer_name, 0, request_description, 1);
-                cout << "Ticket " << ticket_id << " added to the system.\n";
+                getline(cin, requestDescription);
+                ticketList.addTicket(ticketId, customerName, 0, requestDescription, 1);
+                cout << "Ticket " << ticketId << " added to the system.\n";
                 break;
             }
             case 2:
-                ticket_list.display();
+                ticketList.display();
                 break;
             case 3: {
-                int agent_id;
-                string agent_name;
+                int agentId;
+                string agentName;
                 cout << "Enter Agent ID: ";
-                cin >> agent_id;
+                cin >> agentId;
                 cout << "Enter Agent Name: ";
-                cin >> agent_name;
-                agent_management.add_agent(Agent(agent_id, agent_name));
+                cin >> agentName;
+                agentManagement.addAgent(Agent(agentId, agentName));
                 break;
             }
             case 4: {
-                int ticket_id;
+                int ticketId;
                 cout << "Enter Ticket ID to assign: ";
-                cin >> ticket_id;
-                if (ticket_list.ticket_exists(ticket_id)) {
-                    agent_management.assign_ticket_to_agent(ticket_id);
-                    cout << "Ticket " << ticket_id << " assigned to an agent.\n";
+                cin >> ticketId;
+                if (ticketList.ticketExists(ticketId)) {
+                    agentManagement.assignTicketToAgent(ticketId);
+                    cout << "Ticket " << ticketId << " assigned to an agent.\n";
                 } else {
-                    cout << "No ticket with ID " << ticket_id << " exists.\n\n";
+                    cout << "No ticket with ID " << ticketId << " exists.\n\n";
                 }
                 break;
             }
             case 5: {
 
-                int ticket_id;
+                int ticketId;
                 cout << "Enter Ticket ID to enqueue: ";
-                cin >> ticket_id;
-                if(ticket_list.ticket_exists(ticket_id)){
-                pending_tickets.enqueue(ticket_id);
-                string name=pending_tickets.returnticketname(ticket_id);
-                int p=pending_tickets.returnticketpriority(ticket_id);
-                ticketresolutionlog.addTicketToPendingQueue(ticket_id,name,p);
-                cout << "Ticket " << ticket_id << " added to pending queue.\n";
+                cin >> ticketId;
+                if(ticketList.ticketExists(ticketId)){
+                pendingTickets.enqueue(ticketId);
+                string name=pendingTickets.returnticketname(ticketId);
+                int p=pendingTickets.returnticketpriority(ticketId);
+                ticketresolutionlog.addTicketToPendingQueue(ticketId,name,p);
+                cout << "Ticket " << ticketId << " added to pending queue.\n";
                 }
 
                 break;
             }
             case 6:
             ticketresolutionlog.removeTicketFromPendingQueue();
-                pending_tickets.dequeue();
+                pendingTickets.dequeue();
                 break;
             case 7: {
-                int ticket_id;
-                string resolution_detail;
+                int ticketId;
+                string resolutionDetail;
                 cout << "Enter Ticket ID for resolution: ";
-                cin >> ticket_id;
+                cin >> ticketId;
                 cout << "Enter Resolution Detail: ";
                 cin.ignore();
-                getline(cin, resolution_detail);
-                if (ticket_list.ticket_exists(ticket_id)) {
-                    resolution_stack.push(ticket_id, resolution_detail);
-                    ticket_list.delete_ticket(ticket_id);
-                    cout << "Ticket " << ticket_id << " resolved and logged in resolution stack.\n";
+                getline(cin, resolutionDetail);
+                if (ticketList.ticketExists(ticketId)) {
+                    resolutionStack.push(ticketId, resolutionDetail);
+                    ticketList.deleteTicket(ticketId);
+                    cout << "Ticket " << ticketId << " resolved and logged in resolution stack.\n";
                 } else {
-                    cout << "Ticket with ID " << ticket_id << " does not exist.\n";
+                    cout << "Ticket with ID " << ticketId << " does not exist.\n";
                 }
                 break;
             }
             case 8:
-                resolution_stack.display();
+                resolutionStack.display();
                 break;
             case 9:
-                pending_tickets.display();
+                pendingTickets.display();
                 break;
             case 10: {
-                int ticket_id;
+                int ticketId;
                 cout << "Enter Ticket ID to remove: ";
-                cin >> ticket_id;
-                if (ticket_list.ticket_exists(ticket_id)) {
-                    ticket_list.delete_ticket(ticket_id);
-                    cout << "Ticket with ID " << ticket_id << " has been removed.\n";
+                cin >> ticketId;
+                if (ticketList.ticketExists(ticketId)) {
+                    ticketList.deleteTicket(ticketId);
+                    cout << "Ticket with ID " << ticketId << " has been removed.\n";
                 } else {
-                    cout << "Ticket with ID " << ticket_id << " does not exist.\n";
+                    cout << "Ticket with ID " << ticketId << " does not exist.\n";
                 }
                 break;
             }
@@ -904,18 +909,18 @@ void management_function(Linked_list_Tickets &ticket_list, Agent_management &age
                 cout << "Enter the priority level (1-3): ";
                 cin >> priority;
                 if (priority >= 1 && priority <= 3) {
-                    ticket_list.sort(priority);
-                    cout << "Tickets sorted by priority level " << priority << ".\n";
+                    ticketList.sort(priority);
+                    cout << "tickets sorted by priority level " << priority << ".\n";
                 } else {
                     cout << "Invalid priority number. Please enter 1, 2, or 3.\n";
                 }
                 break;
             }
             case 12:
-        agent_management.display_all_agents();
+        agentManagement.displayAllAgents();
             break;
             case 13:
-            if(agent_management.agent_count==0){
+            if(agentManagement.agentCount==0){
                 cout<<"No available agents\n";
                 return;
             }
@@ -923,30 +928,30 @@ void management_function(Linked_list_Tickets &ticket_list, Agent_management &age
             int x;
             cin>>x;
             if(x==1){
-        agent_management.sort_agents_by_id();
+        agentManagement.sortAgentsById();
             }else{
 
-        agent_management.sort_agents_by_ticket_count();
+        agentManagement.sortAgentsByTicketCount();
             }
 
             break;
             case 14:
                 cout << "Enter ID of the agent: ";
-                int agent_id;
-                cin >> agent_id;
+                int agentId;
+                cin >> agentId;
 
                 cout << "Decide which searching algorithm you want to choose:" << endl;
                 cout << "1. Interpolation Search" << endl;
                 cout << "2. Binary Search" << endl;
 
-                int search_choice;
-                cin >> search_choice;
+                int searchChoice;
+                cin >> searchChoice;
                 int found;
 
-                if (search_choice == 1) {
-                    found = agent_management.interpolation_search(agent_management.agents, agent_management.agent_count, agent_id);
-                } else if (search_choice == 2) {
-                    found = agent_management.binary_search(agent_management.agents, agent_management.agent_count, agent_id);
+                if (searchChoice == 1) {
+                    found = agentManagement.interpolationSearch(agentManagement.agents, agentManagement.agentCount, agentId);
+                } else if (searchChoice == 2) {
+                    found = agentManagement.binarySearch(agentManagement.agents, agentManagement.agentCount, agentId);
                 } else {
                     cout << "Invalid search choice." << endl;
                     break;
@@ -954,9 +959,9 @@ void management_function(Linked_list_Tickets &ticket_list, Agent_management &age
 
                 if (found != -1) {
                     cout << "Agent found: ";
-                    agent_management.agents[found].display(); // Display the found agent's details
+                    agentManagement.agents[found].display(); // Display the found agent's details
                 } else {
-                    cout << "Agent with ID " << agent_id << " not found." << endl;
+                    cout << "Agent with ID " << agentId << " not found." << endl;
                 }
 
                 break;
@@ -970,7 +975,7 @@ void management_function(Linked_list_Tickets &ticket_list, Agent_management &age
     }
 }
 
-void readConfig(const string& filename, string& sorting_algorithm, string& searching_algorithm, int& threshold) {
+void readConfig(const string& filename, string& sortingAlgo, string& searchingAlgo, int& threshold) {
     ifstream configFile(filename);
     if (!configFile) {
         cerr << "Could not open the config file: " << filename << endl;
@@ -989,10 +994,10 @@ void readConfig(const string& filename, string& sorting_algorithm, string& searc
                 value.pop_back();
             }
 
-            if (key == "sorting_algorithm") {
-                sorting_algorithm = value;
-            } else if (key == "searching_algorithm") {
-                searching_algorithm = value;
+            if (key == "sortingAlgo") {
+                sortingAlgo = value;
+            } else if (key == "searchingAlgo") {
+                searchingAlgo = value;
             } else if (key == "threshold") {
                 threshold = stoi(value);
             }
@@ -1005,13 +1010,13 @@ int main() {
             Config config = readConfig("config.txt");
 
 
-    cout << "Sorting Algorithm: " << config.sorting_algorithm << endl;
-    cout << "Searching Algorithm: " << config.searching_algorithm << endl;
+    cout << "Sorting Algorithm: " << config.sortingAlgo << endl;
+    cout << "Searching Algorithm: " << config.searchingAlgo << endl;
     cout << "Threshold: " << config.threshold << endl;
-    Linked_list_Tickets ticket_list;
-    Agent_management agent_management; 
-    Stack resolution_stack; 
-    Queue pending_tickets; 
+    LLtickets ticketList;
+    agentManagement agentManagement; 
+    Stack resolutionStack; 
+    Queue pendingTickets; 
     TicketResolutionLogs ticketresolutionlog;
-    management_function(ticket_list, agent_management, resolution_stack, pending_tickets,ticketresolutionlog);
+    managementFunction(ticketList, agentManagement, resolutionStack, pendingTickets,ticketresolutionlog);
 }

@@ -9,8 +9,8 @@
 using namespace std;
 
 struct Config {
-    string sorting_algorithm;
-   string searching_algorithm;
+    string sortingAlgo;
+   string searchingAlgo;
     int threshold;
 };
 
@@ -27,9 +27,9 @@ Config readConfig(const string& filename) {
                 std::string value = line.substr(delimiterPos + 1);
 
                 if (key == "sorting_algorithm") {
-                    config.sorting_algorithm = value;
+                    config.sortingAlgo = value;
                 } else if (key == "searching_algorithm") {
-                    config.searching_algorithm = value;
+                    config.searchingAlgo = value;
                 } else if (key == "threshold") {
                     config.threshold = std::stoi(value);
                 }
