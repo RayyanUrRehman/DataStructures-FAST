@@ -1,10 +1,10 @@
 #include <algorithm>
-#include<cctype>
+#include <cctype>
 #include <iostream>
 #include <ctime>
 #include <string>
-#include<fstream>
-#include<sstream>
+#include <fstream>
+#include <sstream>
 #include "config.h"
 
 using namespace std;
@@ -536,50 +536,6 @@ public:
     }
 };
 
-class Stack {
-private:
-    struct Node {
-        int ticketId;
-        string resolutionDetail;
-        Node* next;
-    };
-
-    Node* top;  
-
-public:
-    Stack() : top(nullptr) {}
-
-    ~Stack() {
-        while (top) {
-            Node* temp = top;
-            top = top->next;
-            delete temp;
-        }
-    }
-
-    void push(int id, string detail) {
-        Node* newNode = new Node{id, detail, top};
-        top = newNode;
-    }
-
-    void pop() {
-        if (top) {
-            Node* temp = top;
-            top = top->next;
-            delete temp;
-        } else {
-            cout << "No resolutions to pop." << endl;
-        }
-    }
-
-    void display() {
-        Node* temp = top;
-        while (temp) {
-            cout << "Ticket ID: " << temp->ticketId << ", Resolution: " << temp->resolutionDetail << endl;
-            temp = temp->next;
-        }
-    }
-};
 
 class Queue {
 private:
@@ -664,6 +620,51 @@ public:
         while (temp) {
             cout << "Ticket ID: " << temp->ticketId << ", Customer: " << temp->customerName
                  << ", Priority: " << temp->priority << endl;
+            temp = temp->next;
+        }
+    }
+};
+
+class Stack {
+private:
+    struct Node {
+        int ticketId;
+        string resolutionDetail;
+        Node* next;
+    };
+
+    Node* top;  
+
+public:
+    Stack() : top(nullptr) {}
+
+    ~Stack() {
+        while (top) {
+            Node* temp = top;
+            top = top->next;
+            delete temp;
+        }
+    }
+
+    void push(int id, string detail) {
+        Node* newNode = new Node{id, detail, top};
+        top = newNode;
+    }
+
+    void pop() {
+        if (top) {
+            Node* temp = top;
+            top = top->next;
+            delete temp;
+        } else {
+            cout << "No resolutions to pop." << endl;
+        }
+    }
+
+    void display() {
+        Node* temp = top;
+        while (temp) {
+            cout << "Ticket ID: " << temp->ticketId << ", Resolution: " << temp->resolutionDetail << endl;
             temp = temp->next;
         }
     }
@@ -785,10 +786,7 @@ public:
 void managementFunction(LLtickets &ticketList, agentManagement &agentManagement, Stack &resolutionStack, Queue &pendingTickets, TicketResolutionLogs &ticketresolutionlog) {
     cout << "RAYYAN UR REHMAN\n";
     cout << "23K-0634\n";
-    cout << "************************************************************************************************\n";
-    cout << "________________________________________________________________________________________________\n\n";
     cout << "---------------------------------WELCOME TO ONE-STOP FAST NU---------------------------------\n";
-    cout << "________________________________________________________________________________________________\n";
     int choice;
     while (true) {
         cout << "________________________________________________________________________________________________\n";

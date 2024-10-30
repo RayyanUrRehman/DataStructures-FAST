@@ -37,7 +37,7 @@ Config readConfig(const string& filename) {
         }
         file.close();
     } else {
-        cerr << "Unable to open config file!" <<endl;
+        // cerr << "Unable to open config file!" <<endl;
     }
 
     return config;
