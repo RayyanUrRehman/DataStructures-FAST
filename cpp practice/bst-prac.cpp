@@ -18,8 +18,9 @@ class node
 };
 
 
-node* print(node* root)     //inorder 
+node* print(node* root)     
 {
+    //inorder 
     if (root == NULL){
         return root;
     }
@@ -47,6 +48,64 @@ bool search(node* root, int target)
     }
     else{
         return search(root->left, target);
+    }
+}
+
+node* minVal(node* root)
+{       
+    if (root == NULL){
+        return root;
+    }
+    else{
+        root = minVal(root->left);
+    }
+}
+
+node* Delete(node* &root, int target)
+{
+    if(root == NULL){
+        return root;
+    }
+
+    if (target == root->data){
+        // 0 child
+        if (root->right == NULL && root->left == NULL){
+            delete root;
+            return NULL;
+        }
+
+        //1 child
+        //right child
+        if(root->left == NULL && root->right != NULL){
+            node* temp = root->right;
+            delete root;
+            return temp;
+        }
+
+        //left child
+        if(root->left != NULL && root->right == NULL){
+            node* temp = root->left;
+            delete root;
+            return temp;
+        }
+
+        // 2 child
+        if(root->right != NULL && root->left != NULL){      
+            //going via right subtree
+            int min = minVal(root->right)->data;
+            root->data = min;
+            root->right = Delete(root->right, min);
+            return root;
+        }
+    }
+
+    if (target > root->data){
+        root->right = Delete(root->right, target);
+        return root;
+    }
+    else{
+        root->left = Delete(root->left, target);
+        return root;
     }
 }
 
@@ -85,5 +144,10 @@ int main()
     node* root = NULL;
     takeInput(root);
     print(root);
-    search(root,5);
+    cout<<endl;
+    // search(root,5);
+    Delete(root,6);
+    cout<<endl;
+    print(root);
+
 }
