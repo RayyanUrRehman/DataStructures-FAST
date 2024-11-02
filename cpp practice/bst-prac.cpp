@@ -29,6 +29,28 @@ node* print(node* root)     //inorder
     root->right = print(root->right);
 }
 
+
+bool search(node* root, int target)
+{
+    if (root == NULL){
+        cout<<"Target not found."<<endl;
+        return false;
+    }
+
+    if(root->data == target){
+        cout<<"Target found."<<endl;
+        return true;
+    }
+    
+    if(target > root->data){
+        return search(root->right, target);
+    }
+    else{
+        return search(root->left, target);
+    }
+}
+
+
 node* insertInBST(node* &root, int val)
 {
     if (root == NULL){
@@ -63,4 +85,5 @@ int main()
     node* root = NULL;
     takeInput(root);
     print(root);
+    search(root,5);
 }
