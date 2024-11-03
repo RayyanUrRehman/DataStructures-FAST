@@ -35,7 +35,7 @@ bool search(node* root, int target)
     if (root == NULL){
         cout<<"Target not found"<<endl;
         return false;
-    }
+    } 
     if (root->data == target){
         cout<<"Target found"<<endl;
         return true;
