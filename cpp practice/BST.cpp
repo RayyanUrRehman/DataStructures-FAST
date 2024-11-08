@@ -30,7 +30,7 @@ void print(node* root) {
 }
 
 
-bool search(node* root, int target)
+bool search(node* root, int target) 
 {
     if (root == NULL){
         cout<<"Target not found"<<endl;
