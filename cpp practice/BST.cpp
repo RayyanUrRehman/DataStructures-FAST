@@ -23,7 +23,7 @@ void print(node* root) {
         return;
     }
 
-    print(root->left);
+    print(root->left); 
     cout << root->data << " ";
     print(root->right);
 
