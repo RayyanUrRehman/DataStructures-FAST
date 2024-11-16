@@ -40,9 +40,60 @@ Node* rotateRight(Node* root)
     leftChild->right = root;
     root->left = leftRightChild;
 
-    //balancing
-    
+    //update heights
+    leftChild->height = max(getHeight(leftChild->right), getHeight(leftChild->left)) + 1;
+    root->height = max(getHeight(root->right), getHeight(root->left)) + 1;
 
+    //return new root
+    return leftChild;
+}
+
+
+Node* rotateLeft(Node* root)
+{
+    Node* rightChild = root->right;
+    Node* rightLeftChild = rightChild->left;
+
+    //rotate
+    rightChild->left = root;
+    root->right = rightLeftChild;
+
+    //update height
+    root->height = max(getHeight(root->right), getHeight(root->left)) + 1;
+    rightChild->height = max(getHeight(rightChild->right), getHeight(rightChild->left)) + 1;
+
+    //return new node
+    return rightChild;
+}
+
+Node* balanceNode(Node* node)
+{
+    int balance = getBalance(node);
+
+    //left-left imbalance
+    if (balance > 1 && getBalance(node->left) >= 0){
+        return rotateRight(node);
+    }
+
+    //right-right imbalance
+    if (balance < -1 && getBalance(node->right) <= 0){
+        return rotateLeft(node);
+    }
+
+    //right-Left imbalance
+    if (balance < -1 && getBalance(node->right) > 0){
+        node->right = rotateRight(node->right);
+        return rotateLeft(node);
+    }
+
+    //left-right imbalance
+    if (balance > 1 && getBalance(node->left) < 0){
+        node->left = rotateLeft(node->left);
+        return rotateRight(node);
+    }
+
+    //if no balance needed
+    return node;
 }
 
 
