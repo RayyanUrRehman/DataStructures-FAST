@@ -86,6 +86,8 @@ int main()
     h.print();
 
     h.deletion();
+    // h.deletion();
+    // h.deletion();
 
     h.print();
 
