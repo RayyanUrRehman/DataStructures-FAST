@@ -34,6 +34,33 @@ class heap
         index++;
     }
 
+    void deletion()     //always del the root
+    {
+        int i=0;
+        index--;
+        arr[i] = arr[index];
+
+        while(i < index){
+            int left = 2*i+1;
+            int right = 2*i+2;
+            int largest = i;
+
+            if (left < index && arr[left] > arr[largest]){
+                largest = left;
+            }
+            if (right < index && arr[right] > arr[largest]){
+                largest = right;
+            }
+            if (largest != i){
+                swap(arr[largest], arr[i]);
+                i = largest;
+            }
+            else{
+                break;
+            }
+        }
+    }
+
 
     void print()
     {
@@ -55,6 +82,10 @@ int main()
     h.insert(30);
     h.insert(5);
     h.insert(15);
+
+    h.print();
+
+    h.deletion();
 
     h.print();
 
