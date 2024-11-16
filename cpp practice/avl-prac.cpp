@@ -97,6 +97,80 @@ Node* balanceNode(Node* node)
 }
 
 
+Node* insert(Node* root, int key)
+{   
+    if (root == NULL){
+        return root = new Node(key);
+    }
+
+    if (key > root->data){
+        root->right = insert(root->right, key);
+    }
+    else{
+        root->left = insert(root->left, key);
+    }
+
+    root->height = max(getHeight(root->right), getHeight(root->left)) + 1;
+    balanceNode(root);
+    return root;
+}
+
+Node* minVal(Node* root)
+{
+    Node* current = root;
+    while(current != nullptr){
+        current = current->left;
+    }
+    return current;
+}
+
+
+Node* deletion(Node* root, int key)
+{   
+    if (root == nullptr){
+        return root;
+    }
+    else if(key > root->data){
+        root->right = deletion(root->right,key);
+    }
+    else if(key < root->data){
+        root->left = deletion(root->left,key);
+    }
+    else{
+        //0 child
+        if (root->left == nullptr && root->right == nullptr){
+            delete root;
+            return nullptr;
+        }
+        
+        //1 child
+        if (root->right != nullptr && root->left == nullptr){
+            Node* temp = root;
+            delete root;
+            return temp->right;
+        }
+        if (root->left != nullptr && root->right == nullptr){
+            Node* temp = root;
+            delete root;
+            return temp->left;
+        }
+
+        // 2child
+        if (root->left && root->right){
+            int mini = minVal(root->right)->data;
+            root->data = mini;
+            root->right = deletion(root->right, mini);
+            return root;
+        }
+    }
+
+    //adjust root height
+    root->height = max(getHeight(root->right), getHeight(root->left)) + 1;
+
+    balanceNode(root);
+    return root;
+}
+
 int main()
 {
     Node* node = new Node(10);
