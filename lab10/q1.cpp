@@ -79,7 +79,7 @@ class Heap{
 
     void Make_Min_Heap(int* arr, int size){
 
-        for(int i=size/2; i>=0; i--){   //---- size/2  to ignore the leaf Nodes
+        for(int i=size/2; i>=0; i--){   
         Heapify_Down(arr,size,i);
         }
     }
