@@ -1,5 +1,9 @@
 #include <iostream>
 #include <string>
+#include <chrono>
+#include <cstdlib>
+#include <ctime>
+
 using namespace std;
 
 struct AVLNode {
@@ -15,7 +19,7 @@ struct AVLNode {
 };
 
 class AVLTree {
-    private:
+private:
     AVLNode* root;
 
     int getHeight(AVLNode* node) {
@@ -60,26 +64,22 @@ class AVLTree {
         else if (id > node->id)
             node->right = insert(node->right, id, name, age);
         else
-            return node; // Duplicate keys not allowed
+            return node;
 
         node->height = 1 + max(getHeight(node->left), getHeight(node->right));
         int balance = getBalanceFactor(node);
 
-        // Left Left Case
         if (balance > 1 && id < node->left->id)
             return rotateRight(node);
 
-        // Right Right Case
         if (balance < -1 && id > node->right->id)
             return rotateLeft(node);
 
-        // Left Right Case
         if (balance > 1 && id > node->left->id) {
             node->left = rotateLeft(node->left);
             return rotateRight(node);
         }
 
-        // Right Left Case
         if (balance < -1 && id < node->right->id) {
             node->right = rotateRight(node->right);
             return rotateLeft(node);
@@ -105,7 +105,7 @@ class AVLTree {
         }
     }
 
-    public:
+public:
     AVLTree() : root(nullptr) {}
 
     void insert(int id, string name, int age) {
@@ -122,13 +122,38 @@ class AVLTree {
 };
 
 int main() {
-    AVLTree avl;
-    avl.insert(1, "Rayyan", 25);
-    avl.insert(2, "Sufyan", 30);
-    avl.insert(3, "Azlaan", 35);
+    const int datasetSize = 1000;
+    vector<tuple<int, string, int>> data;
 
-    cout << "AVL Tree Records:" << endl;
-    avl.display();
+    srand(time(nullptr));
+    for (int i = 0; i < datasetSize; ++i) {
+        int id = rand() % 10000;
+        string name = "Name" + to_string(i);
+        int value = rand() % 1000;
+        data.emplace_back(id, name, value);
+    }
+
+    AVLTree avl;
+
+    auto startInsertion = chrono::high_resolution_clock::now();
+    for (const auto& record : data) {
+        avl.insert(get<0>(record), get<1>(record), get<2>(record));
+    }
+    auto endInsertion = chrono::high_resolution_clock::now();
+    chrono::duration<double, milli> insertionTime = endInsertion - startInsertion;
+
+    cout << "Insertion Time: " << insertionTime.count() << " ms" << endl;
+
+    const int numSearches = 10000;
+    auto startSearch = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numSearches; ++i) {
+        int randomIndex = rand() % datasetSize;
+        avl.search(get<0>(data[randomIndex]));
+    }
+    auto endSearch = chrono::high_resolution_clock::now();
+    chrono::duration<double, milli> searchTime = endSearch - startSearch;
+
+    cout << "Search Time for " << numSearches << " searches: " << searchTime.count() << " ms" << endl;
 
     return 0;
 }

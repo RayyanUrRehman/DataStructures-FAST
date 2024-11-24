@@ -1,115 +1,101 @@
 #include <iostream>
+#include <vector>
+#include <tuple>
 #include <string>
+#include <chrono>
+#include <cstdlib>
+#include <ctime>
+
 using namespace std;
 
-struct BSTNode {
-    int id;
-    string name;
-    int age;
-    BSTNode* left;
-    BSTNode* right;
-
-    BSTNode(int _id, string _name, int _age)
-        : id(_id), name(_name), age(_age), left(nullptr), right(nullptr) {}
-};
-
 class BST {
-    private:
-        BSTNode* root;
+private:
+    struct Node {
+        int key;
+        string name;
+        int value;
+        Node* left;
+        Node* right;
 
-        BSTNode* insert(BSTNode* node, int id, string name, int age) {
-            if (node == nullptr) return new BSTNode(id, name, age);
-            if (id < node->id) node->left = insert(node->left, id, name, age);
-            else node->right = insert(node->right, id, name, age);
-            return node;
+        Node(int k, const string& n, int v) : key(k), name(n), value(v), left(nullptr), right(nullptr) {}
+    };
+
+    Node* root;
+
+    void insert(Node*& node, int key, const string& name, int value) {
+        if (!node) {
+            node = new Node(key, name, value);
+        } else if (key < node->key) {
+            insert(node->left, key, name, value);
+        } else {
+            insert(node->right, key, name, value);
         }
+    }
 
-        BSTNode* search(BSTNode* node, int id) {
-            if (node == nullptr || node->id == id) return node;
-            if (id < node->id) return search(node->left, id);
-            return search(node->right, id);
+    bool search(Node* node, int key) const {
+        if (!node) return false;
+        if (key == node->key) return true;
+        if (key < node->key) return search(node->left, key);
+        return search(node->right, key);
+    }
+
+    void clear(Node* node) {
+        if (node) {
+            clear(node->left);
+            clear(node->right);
+            delete node;
         }
+    }
 
-        BSTNode* findMin(BSTNode* node) {
-            while (node && node->left != nullptr) node = node->left;
-            return node;
-        }
+public:
+    BST() : root(nullptr) {}
 
-        BSTNode* deleteNode(BSTNode* node, int id) {
-            if (node == nullptr) return node;
-            if (id < node->id) node->left = deleteNode(node->left, id);
-            else if (id > node->id) node->right = deleteNode(node->right, id);
-            else {
-                if (node->left == nullptr) {
-                    BSTNode* temp = node->right;
-                    delete node;
-                    return temp;
-                } else if (node->right == nullptr) {
-                    BSTNode* temp = node->left;
-                    delete node;
-                    return temp;
-                }
-                BSTNode* temp = findMin(node->right);
-                node->id = temp->id;
-                node->name = temp->name;
-                node->age = temp->age;
-                node->right = deleteNode(node->right, temp->id);
-            }
-            return node;
-        }
+    ~BST() {
+        clear(root);
+    }
 
-        void inorderTraversal(BSTNode* node) {
-            if (node) {
-                inorderTraversal(node->left);
-                cout << "ID: " << node->id << ", Name: " << node->name << ", Age: " << node->age << endl;
-                inorderTraversal(node->right);
-            }
-        }
+    void insert(int key, const string& name, int value) {
+        insert(root, key, name, value);
+    }
 
-    public:
-        BST() : root(nullptr) {}
-
-        void insert(int id, string name, int age) {
-            root = insert(root, id, name, age);
-        }
-
-        BSTNode* search(int id) {
-            return search(root, id);
-        }
-
-        void update(int id, string newName, int newAge) {
-            BSTNode* node = search(id);
-            if (node) {
-                node->name = newName;
-                node->age = newAge;
-            }
-        }
-
-        void deleteNode(int id) {
-            root = deleteNode(root, id);
-        }
-
-        void display() {
-            inorderTraversal(root);
-        }
+    bool search(int key) const {
+        return search(root, key);
+    }
 };
 
 int main() {
+    const int datasetSize = 10000;
+    vector<tuple<int, string, int>> data;
+
+    srand(time(nullptr));
+    for (int i = 0; i < datasetSize; ++i) {
+        int id = rand() % 10000;
+        string name = "Name" + to_string(i);
+        int value = rand() % 1000;
+        data.emplace_back(id, name, value);
+    }
+
     BST bst;
-    bst.insert(1, "Rayyan", 25);
-    bst.insert(2, "Sufyan", 30);
-    bst.insert(3, "Azlaan", 35);
 
-    cout << "Initial Records:" << endl;
-    bst.display();
+    auto startInsertion = chrono::high_resolution_clock::now();
+    for (const auto& record : data) {
+        bst.insert(get<0>(record), get<1>(record), get<2>(record));
+    }
+    auto endInsertion = chrono::high_resolution_clock::now();
+    chrono::duration<double, milli> insertionTime = endInsertion - startInsertion;
 
-    cout << "\nUpdating Sufyan's age to 32..." << endl;
-    bst.update(2, "Bob", 32);
-    bst.display();
+    cout << "Insertion Time: " << insertionTime.count() << " ms" << endl;
 
-    cout << "\nDeleting Rayyan..." << endl;
-    bst.deleteNode(1);
-    bst.display();
+    const int numSearches = 10000;
+    auto startSearch = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numSearches; ++i) {
+        int randomIndex = rand() % datasetSize;
+        bst.search(get<0>(data[randomIndex]));
+    }
+    auto endSearch = chrono::high_resolution_clock::now();
+    chrono::duration<double, milli> searchTime = endSearch - startSearch;
+
+    cout << "Search Time for " << numSearches << " searches: " << searchTime.count() << " ms" << endl;
 
     return 0;
 }
