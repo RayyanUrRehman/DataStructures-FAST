@@ -20,7 +20,7 @@ struct AVLNode {
 };
 
 class AVLTree {
-private:
+    private:
     AVLNode* root;
 
     int getHeight(AVLNode* node) {
@@ -106,7 +106,7 @@ private:
         }
     }
 
-public:
+    public:
     AVLTree() : root(nullptr) {}
 
     void insert(int id, string name, int age) {

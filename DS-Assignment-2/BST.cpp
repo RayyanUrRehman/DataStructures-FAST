@@ -39,6 +39,41 @@ private:
         return search(node->right, key);
     }
 
+    Node* deleteNode(Node* node, int key) {
+        if (!node) return node;
+
+        if (key < node->key) {
+            node->left = deleteNode(node->left, key);
+        } else if (key > node->key) {
+            node->right = deleteNode(node->right, key);
+        } else {
+            if (!node->left) {
+                Node* temp = node->right;
+                delete node;
+                return temp;
+            } else if (!node->right) {
+                Node* temp = node->left;
+                delete node;
+                return temp;
+            }
+
+            Node* temp = minNode(node->right);
+            node->key = temp->key;
+            node->name = temp->name;
+            node->value = temp->value;
+            node->right = deleteNode(node->right, temp->key);
+        }
+        return node;
+    }
+
+    Node* minNode(Node* node) {
+        Node* current = node;
+        while (current && current->left) {
+            current = current->left;
+        }
+        return current;
+    }
+
     void clear(Node* node) {
         if (node) {
             clear(node->left);
@@ -60,6 +95,10 @@ public:
 
     bool search(int key) const {
         return search(root, key);
+    }
+
+    void deleteNode(int key) {
+        root = deleteNode(root, key);
     }
 };
 
@@ -96,6 +135,17 @@ int main() {
     chrono::duration<double, milli> searchTime = endSearch - startSearch;
 
     cout << "Search Time for " << numSearches << " searches: " << searchTime.count() << " ms" << endl;
+
+    const int numDeletes = 10000;
+    auto startDelete = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numDeletes; ++i) {
+        int randomIndex = rand() % datasetSize;
+        bst.deleteNode(get<0>(data[randomIndex]));
+    }
+    auto endDelete = chrono::high_resolution_clock::now();
+    chrono::duration<double, milli> deleteTime = endDelete - startDelete;
+
+    cout << "Delete Time for " << numDeletes << " deletions: " << deleteTime.count() << " ms" << endl;
 
     return 0;
 }
