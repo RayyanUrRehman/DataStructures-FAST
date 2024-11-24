@@ -15,7 +15,7 @@ struct AVLNode {
 };
 
 class AVLTree {
-private:
+    private:
     AVLNode* root;
 
     int getHeight(AVLNode* node) {
@@ -105,7 +105,7 @@ private:
         }
     }
 
-public:
+    public:
     AVLTree() : root(nullptr) {}
 
     void insert(int id, string name, int age) {
@@ -123,9 +123,9 @@ public:
 
 int main() {
     AVLTree avl;
-    avl.insert(1, "Alice", 25);
-    avl.insert(2, "Bob", 30);
-    avl.insert(3, "Charlie", 35);
+    avl.insert(1, "Rayyan", 25);
+    avl.insert(2, "Sufyan", 30);
+    avl.insert(3, "Azlaan", 35);
 
     cout << "AVL Tree Records:" << endl;
     avl.display();
