@@ -20,7 +20,7 @@ struct AVLNode {
 };
 
 class AVLTree {
-    private:
+private:
     AVLNode* root;
 
     int getHeight(AVLNode* node) {
@@ -98,6 +98,59 @@ class AVLTree {
         return search(node->right, id);
     }
 
+    AVLNode* minValueNode(AVLNode* node) {
+        AVLNode* current = node;
+        while (current->left != nullptr) current = current->left;
+        return current;
+    }
+
+    AVLNode* deleteNode(AVLNode* root, int id) {
+        if (root == nullptr) return root;
+
+        if (id < root->id) {
+            root->left = deleteNode(root->left, id);
+        } else if (id > root->id) {
+            root->right = deleteNode(root->right, id);
+        } else {
+            if (root->left == nullptr) {
+                AVLNode* temp = root->right;
+                delete root;
+                return temp;
+            } else if (root->right == nullptr) {
+                AVLNode* temp = root->left;
+                delete root;
+                return temp;
+            }
+
+            AVLNode* temp = minValueNode(root->right);
+            root->id = temp->id;
+            root->name = temp->name;
+            root->age = temp->age;
+            root->right = deleteNode(root->right, temp->id);
+        }
+
+        root->height = 1 + max(getHeight(root->left), getHeight(root->right));
+        int balance = getBalanceFactor(root);
+
+        if (balance > 1 && getBalanceFactor(root->left) >= 0)
+            return rotateRight(root);
+
+        if (balance < -1 && getBalanceFactor(root->right) <= 0)
+            return rotateLeft(root);
+
+        if (balance > 1 && getBalanceFactor(root->left) < 0) {
+            root->left = rotateLeft(root->left);
+            return rotateRight(root);
+        }
+
+        if (balance < -1 && getBalanceFactor(root->right) > 0) {
+            root->right = rotateRight(root->right);
+            return rotateLeft(root);
+        }
+
+        return root;
+    }
+
     void inorderTraversal(AVLNode* node) {
         if (node) {
             inorderTraversal(node->left);
@@ -106,7 +159,7 @@ class AVLTree {
         }
     }
 
-    public:
+public:
     AVLTree() : root(nullptr) {}
 
     void insert(int id, string name, int age) {
@@ -117,13 +170,17 @@ class AVLTree {
         return search(root, id);
     }
 
+    void deleteKey(int id) {
+        root = deleteNode(root, id);
+    }
+
     void display() {
         inorderTraversal(root);
     }
 };
 
 int main() {
-    const int datasetSize = 1000;
+    const int datasetSize = 10000;
     vector<tuple<int, string, int>> data;
 
     srand(time(nullptr));
@@ -136,15 +193,16 @@ int main() {
 
     AVLTree avl;
 
+    // Measure insertion time
     auto startInsertion = chrono::high_resolution_clock::now();
     for (const auto& record : data) {
         avl.insert(get<0>(record), get<1>(record), get<2>(record));
     }
     auto endInsertion = chrono::high_resolution_clock::now();
     chrono::duration<double, milli> insertionTime = endInsertion - startInsertion;
-
     cout << "Insertion Time: " << insertionTime.count() << " ms" << endl;
 
+    // Measure search time
     const int numSearches = 10000;
     auto startSearch = chrono::high_resolution_clock::now();
     for (int i = 0; i < numSearches; ++i) {
@@ -153,8 +211,18 @@ int main() {
     }
     auto endSearch = chrono::high_resolution_clock::now();
     chrono::duration<double, milli> searchTime = endSearch - startSearch;
-
     cout << "Search Time for " << numSearches << " searches: " << searchTime.count() << " ms" << endl;
+
+    // Measure delete time
+    const int numDeletions = 10000;
+    auto startDelete = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numDeletions; ++i) {
+        int randomIndex = rand() % datasetSize;
+        avl.deleteKey(get<0>(data[randomIndex]));
+    }
+    auto endDelete = chrono::high_resolution_clock::now();
+    chrono::duration<double, milli> deleteTime = endDelete - startDelete;
+    cout << "Delete Time for " << numDeletions << " deletions: " << deleteTime.count() << " ms" << endl;
 
     return 0;
 }
