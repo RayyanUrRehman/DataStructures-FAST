@@ -89,53 +89,53 @@ public:
 };
 
 class BTree {
-private:
-    BTreeNode* root;
-    int minDegree;
+    private:
+        BTreeNode* root;
+        int minDegree;
 
-public:
-    BTree(int _minDegree) : root(nullptr), minDegree(_minDegree) {}
+    public:
+        BTree(int _minDegree) : root(nullptr), minDegree(_minDegree) {}
 
-    void traverse() {
-        if (root != nullptr) root->traverse();
-    }
+        void traverse() {
+            if (root != nullptr) root->traverse();
+        }
 
-    BTreeNode* search(int id) {
-        return (root == nullptr) ? nullptr : root->search(id);
-    }
+        BTreeNode* search(int id) {
+            return (root == nullptr) ? nullptr : root->search(id);
+        }
 
-    void insert(int id, string name, int age) {
-        if (root == nullptr) {
-            root = new BTreeNode(minDegree, true);
-            root->keys.push_back(id);
-            root->names.push_back(name);
-            root->ages.push_back(age);
-        } else {
-            if (root->keys.size() == 2 * minDegree - 1) {
-                BTreeNode* newRoot = new BTreeNode(minDegree, false);
-                newRoot->children.push_back(root);
-                newRoot->splitChild(0, root);
-                int i = (newRoot->keys[0] < id) ? 1 : 0;
-                newRoot->children[i]->insertNonFull(id, name, age);
-                root = newRoot;
+        void insert(int id, string name, int age) {
+            if (root == nullptr) {
+                root = new BTreeNode(minDegree, true);
+                root->keys.push_back(id);
+                root->names.push_back(name);
+                root->ages.push_back(age);
             } else {
-                root->insertNonFull(id, name, age);
+                if (root->keys.size() == 2 * minDegree - 1) {
+                    BTreeNode* newRoot = new BTreeNode(minDegree, false);
+                    newRoot->children.push_back(root);
+                    newRoot->splitChild(0, root);
+                    int i = (newRoot->keys[0] < id) ? 1 : 0;
+                    newRoot->children[i]->insertNonFull(id, name, age);
+                    root = newRoot;
+                } else {
+                    root->insertNonFull(id, name, age);
+                }
             }
         }
-    }
 };
 
 int main() {
     BTree btree(3);
 
 
-    btree.insert(10, "Alice", 25);
-    btree.insert(20, "Bob", 30);
-    btree.insert(5, "Charlie", 35);
-    btree.insert(6, "Daisy", 28);
-    btree.insert(12, "Eve", 24);
-    btree.insert(30, "Frank", 40);
-    btree.insert(7, "Grace", 22);
+    btree.insert(10, "Rayyan", 25);
+    btree.insert(20, "Sufyan", 30);
+    btree.insert(5, "Azlaan", 35);
+    btree.insert(6, "Adil", 28);
+    btree.insert(12, "Shayan", 24);
+    btree.insert(30, "Obaid", 40);
+    btree.insert(7, "Ali", 22);
 
     cout << "Traversing B-Tree:" << endl;
     btree.traverse();
