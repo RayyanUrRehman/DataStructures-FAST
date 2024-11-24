@@ -3,7 +3,8 @@
 #include <chrono>
 #include <cstdlib>
 #include <ctime>
-
+#include <vector>
+#include <tuple>
 using namespace std;
 
 struct AVLNode {
