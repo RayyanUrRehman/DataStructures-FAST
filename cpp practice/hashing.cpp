@@ -62,6 +62,27 @@ class hashTable
                 cout<<i<<" : -"<<endl;
             }
         }
+        cout<<endl;
+    }
+
+    int Delete(int k, int v)
+    {
+        int hashNum = hashFunc(k);
+
+        if (arr[hashNum]->val == v){
+            arr[hashNum] = arr[hashNum]->next;
+        }
+        else{
+            Node* current = arr[hashNum]->next;
+            Node* temp = arr[hashNum];
+            while(current->val != v){
+                current = current->next;
+                temp = temp->next;
+            }
+            temp->next = current->next;
+            
+        }
+        // cout<<"Element not found!"<<endl;
     }
 };
 
@@ -80,6 +101,11 @@ int main()
 
     table.print();
 
+    // table.Delete(10,20);
+    table.Delete(30,40);
+    table.Delete(27,50);
+    // table.Delete(28,50);
+    table.print();
 
     return 0;
 }

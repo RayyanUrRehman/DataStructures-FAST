@@ -1,1 +1,2 @@
-int smallestIndex = 0;
+
+    // table.print();
