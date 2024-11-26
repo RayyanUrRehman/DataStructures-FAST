@@ -58,6 +58,9 @@ class hashTable
                 }
                 cout<<endl;
             }
+            else{
+                cout<<i<<" : -"<<endl;
+            }
         }
     }
 };
