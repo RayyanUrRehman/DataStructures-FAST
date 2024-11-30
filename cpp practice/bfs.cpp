@@ -82,5 +82,9 @@ int main() {
     // Perform BFS traversal
     graph.BFS(startVertex);
 
+    //testcase
+    //input 5 6 0 1 0 2 1 3 1 4 2 4 3 0 0
+    //output 0 1 2 3 4
+
     return 0;
 }
