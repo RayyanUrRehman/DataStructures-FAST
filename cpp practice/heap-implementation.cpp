@@ -40,7 +40,7 @@ class Heap{
         index++;
     }
 
-void Deletion() {                         // Removes root element
+    void Deletion() {                         // Removes root element
         if (index == 0) {
             cout << "Heap is Empty" << endl;
             return;
