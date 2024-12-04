@@ -69,12 +69,14 @@ class Heap{
             }
         }
     }
+
     void print(){
         for(int i=0; i< index; i++){
             cout << arr[i] << " " ;
         }
         cout << endl;
     }
+
 
 };
 
@@ -90,7 +92,7 @@ int main(){
     cout << "Min Heap after insertions: ";
     h.print();
     
-    h.Deletion();
-    cout << " Min Heap after deletion: ";
-    h.print();
+    // h.Deletion();
+    // cout << " Min Heap after deletion: ";
+    // h.print();
 }
