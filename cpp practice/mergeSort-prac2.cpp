@@ -61,8 +61,6 @@ void mergeSort(int* arr, int s, int e)
 }
 
 
-
-
 int main()
 {
     int arr[5] = {5,2,4,1,3};
