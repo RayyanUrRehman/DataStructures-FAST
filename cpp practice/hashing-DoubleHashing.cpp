@@ -15,7 +15,7 @@ class element
 
 class hashTable
 {
-    public:
+    public:   
     element** arr;
     int size = 10;
 
