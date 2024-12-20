@@ -46,7 +46,7 @@ void HeapSort(int *arr, int size){
 
 int main(){
     int arr[] = {3, 5, 9, 6, 8, 20, 10, 12, 18, 9};
-    int size = sizeof(arr)/sizeof(arr[0]);
+    int size = sizeof(arr)/sizeof(arr[0]); 
     
     HeapSort(arr, size);
 
