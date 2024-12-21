@@ -1,15 +1,16 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
 
-#define maxSize 100
+#define Max_vertex 100
 
 class graph
 {
     public:
-    int adj[maxSize][maxSize];
     int v;
+    int adj[Max_vertex][Max_vertex];
 
-    graph(int ver):v(ver){
+    graph(int ver){
+        v = ver;
         for (int i=0;i<v;i++){
             for (int j=0;j<v;j++){
                 adj[i][j] = 0;
@@ -17,58 +18,63 @@ class graph
         }
     }
 
-
     void addEdge(int src, int des)
     {
         adj[src][des] = 1;
         adj[des][src] = 1;
     }
 
-
     void bfs(int start)
     {
-        int queue[maxSize];
-        bool visited[maxSize] = {false};
+        int queue[Max_vertex];
+        int visited[Max_vertex] = {false};
         int front = 0; int rear = 0;
 
-        //start queue
         queue[rear++] = start;
         visited[start] = true;
 
-        while(front < rear)
-        {
+        cout<<"Starting vertex is: "<<start<<endl;
+
+        while(front < rear){
             int current = queue[front++];
             cout<<current<<" ";
+
             for (int i=0;i<v;i++){
                 if (adj[current][i]==1 && visited[i]==false){
                     visited[i] = true;
                     queue[rear++] = i;
-                }
+                }    
+                
             }
         }
+
     }
 };
+
 
 
 
 int main()
 {
     int vertices;
-    cout<<"vertices: ";
-    cin>>vertices;
+    int edges;
+    cout<<"Enter vertex and edges: ";
+    cin>>vertices>>edges;
+
     graph g(vertices);
 
-    int edges;
-    cout<<"Edges: ";
-    cin>>edges;
-
+    cout<<"Enter src-des: "<<endl;
+    int src; int des;
     for (int i=0;i<edges;i++){
-        int src; int des;
         cin>>src>>des;
         g.addEdge(src,des);
-    }
+    }   
 
-    g.bfs(0);
+    int start;
+    cout<<"Starting vertex for bfs: ";
+    cin>>start;
+    g.bfs(start);
+
 
     return 0;
 }
