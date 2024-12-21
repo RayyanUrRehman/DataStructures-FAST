@@ -1,178 +1,88 @@
 #include<iostream>
 using namespace std;
 
-class Node
+class node
 {
     public:
-    Node* right;
-    Node* left;
     int data;
     int height;
+    node* left;
+    node* right;
 
-    Node(int val):right(NULL),left(NULL),data(val),height(1){};
+    node(int d){
+        data = d;
+        height = 0;
+        left = nullptr;
+        right = nullptr;
+    }
 
 };
 
-int getHeight(Node* node)
+int getHeight(node* root)
 {
-    if (node == NULL){
-        return 0;
-    }
-    return node->height;
+    return root->height;
 }
 
-
-int getBalance(Node* node)
+int getBalance(node* root)
 {
-    if (node == NULL){
-        return 0;
-    }
-    return (getHeight(node->left) - getHeight(node->right));
+    return (getHeight(root->left) - getHeight(root->right));
 }
 
-
-Node* rotateRight(Node* root)
+node* rightRotate(node* root)
 {
-    Node* leftChild = root->left;
-    Node* leftRightChild = leftChild->right;
+    node* leftChild = root->left;
+    node* LRchild = leftChild->right;
 
-    //rotate
     leftChild->right = root;
-    root->left = leftRightChild;
+    root->left = LRchild;
 
-    //update heights
-    leftChild->height = max(getHeight(leftChild->right), getHeight(leftChild->left)) + 1;
-    root->height = max(getHeight(root->right), getHeight(root->left)) + 1;
+    root->height = max(getHeight(root->left), getHeight(root->right)) + 1;
+    leftChild->height = max(getHeight(leftChild->left), getHeight(leftChild->right)) + 1;
 
-    //return new root
-    return leftChild;
+    return root;
 }
 
-
-Node* rotateLeft(Node* root)
+node* leftRotate(node* root)
 {
-    Node* rightChild = root->right;
-    Node* rightLeftChild = rightChild->left;
+    node* rightChild = root->right;
+    node* RLchild = rightChild->left;
 
-    //rotate
     rightChild->left = root;
-    root->right = rightLeftChild;
+    root->right = RLchild;
 
-    //update height
-    root->height = max(getHeight(root->right), getHeight(root->left)) + 1;
-    rightChild->height = max(getHeight(rightChild->right), getHeight(rightChild->left)) + 1;
+    root->height = max(getHeight(root->left), getHeight(root->right)) + 1;
+    rightChild->height = max(getHeight(rightChild->left), getHeight(rightChild->right)) + 1;
 
-    //return new node
-    return rightChild;
-}
-
-Node* balanceNode(Node* node)
-{
-    int balance = getBalance(node);
-
-    //left-left imbalance
-    if (balance > 1 && getBalance(node->left) >= 0){
-        return rotateRight(node);
-    }
-
-    //right-right imbalance
-    if (balance < -1 && getBalance(node->right) <= 0){
-        return rotateLeft(node);
-    }
-
-    //right-Left imbalance
-    if (balance < -1 && getBalance(node->right) > 0){
-        node->right = rotateRight(node->right);
-        return rotateLeft(node);
-    }
-
-    //left-right imbalance
-    if (balance > 1 && getBalance(node->left) < 0){
-        node->left = rotateLeft(node->left);
-        return rotateRight(node);
-    }
-
-    //if no balance needed
-    return node;
-}
-
-
-Node* insert(Node* root, int key)
-{   
-    if (root == NULL){
-        return root = new Node(key);
-    }
-
-    if (key > root->data){
-        root->right = insert(root->right, key);
-    }
-    else{
-        root->left = insert(root->left, key);
-    }
-
-    root->height = max(getHeight(root->right), getHeight(root->left)) + 1;
-    balanceNode(root);
     return root;
 }
 
-Node* minVal(Node* root)
+node* balanceNode(node* root)
 {
-    Node* current = root;
-    while(current != nullptr){
-        current = current->left;
-    }
-    return current;
-}
+    int balance = getBalance(root);
 
-
-Node* deletion(Node* root, int key)
-{   
-    if (root == nullptr){
-        return root;
-    }
-    else if(key > root->data){
-        root->right = deletion(root->right,key);
-    }
-    else if(key < root->data){
-        root->left = deletion(root->left,key);
-    }
-    else{
-        //0 child
-        if (root->left == nullptr && root->right == nullptr){
-            delete root;
-            return nullptr;
-        }
-        
-        //1 child
-        if (root->right != nullptr && root->left == nullptr){
-            Node* temp = root;
-            delete root;
-            return temp->right;
-        }
-        if (root->left != nullptr && root->right == nullptr){
-            Node* temp = root;
-            delete root;
-            return temp->left;
-        }
-
-        // 2child
-        if (root->left && root->right){
-            int mini = minVal(root->right)->data;
-            root->data = mini;
-            root->right = deletion(root->right, mini);
-            return root;
-        }
+    if (balance > 1 && getBalance(root->left) > 0){
+        return rightRotate(root);
     }
 
-    //adjust root height
-    root->height = max(getHeight(root->right), getHeight(root->left)) + 1;
+    if (balance < -1 && getBalance(root->right) < 0){
+        return leftRotate(root);
+    }
 
-    balanceNode(root);
+    if (balance > 1 && getBalance(root->left) < 0){
+        root->left = leftRotate(root->left);
+        return rightRotate(root);
+    }
+
+    if (balance < 1 && getBalance(root->right) > 0){
+        root->right = rightRotate(root->right);
+        return leftRotate(root);
+    }
+
     return root;
 }
+
 
 int main()
 {
-    Node* node = new Node(10);
     return 0;
 }
