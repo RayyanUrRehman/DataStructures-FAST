@@ -81,6 +81,81 @@ node* balanceNode(node* root)
     return root;
 }
 
+node* insert(int v, node* root)
+{
+    node* newNode = new node(v);
+    if (root == nullptr){
+        root = newNode;
+        return root;
+    }
+    else if (root->data > v){
+        root->left = insert(v,root->left);
+    }
+    else if(root->data < v){
+        root->right = insert(v, root->right);
+    }
+
+    root->height = max(getHeight(root->left), getHeight(root->right)) + 1;
+    root = balanceNode(root);
+    return root;
+}
+
+node* deleteNode(int v, node* root)
+{
+    if (root = nullptr){
+        return root;
+    }
+    else if(root->data > v){
+        root->left = deleteNode(v,root->left);
+    }
+    else if(root->data < v){
+        root->right = deleteNode(v,root->right);
+    }
+    else{
+        //0 child
+        if (!root->left && !root->right){
+            delete root;
+            return nullptr;
+        }
+        
+        //1child
+        if (!root->left && root->right){
+            node* temp = root->right;
+            delete root;
+            return temp;
+        }
+        if (!root->right && root->left){
+            node* temp = root->left;
+            delete root;
+            return temp;
+        }
+
+        //2child
+        if (root->right && root->left){
+            int mini = minNode(root->right)->data;
+            root->data = mini;
+            root->right = deleteNode(mini, root->right);
+            return root;
+        }
+    }
+
+    if (root== nullptr){
+        return root;
+    }
+
+    root->height = max(getHeight(root->right), getHeight(root->left)) + 1;
+    return balanceNode(root);
+
+}
+
+node* minNode(node* root)
+{
+    while(root != nullptr){
+        root = root->left;
+    }
+    return root;
+}
+
 
 int main()
 {
