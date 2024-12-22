@@ -37,11 +37,11 @@ void HeapSort(int *arr, int size){
         Heapify(arr,size,i);
     }   
                                       
-    // while( index > 0 ){
-    //     swap(arr[0],arr[index]);           //Step # 2 swap first and last
-    //     index--;
-    //     Heapify(arr, index, 0);            //Step # 3 Build  Heap
-    // }
+    while( index > 0 ){
+        swap(arr[0],arr[index]);           //Step # 2 swap first and last
+        index--;
+        Heapify(arr, index, 0);            //Step # 3 Build  Heap
+    }
 }  
 
 int main(){
