@@ -1,134 +1,127 @@
-#include<iostream>
+#include <climits>
+#include <iostream>
 using namespace std;
 
+class MinHeap {
+  int *heap;
+  int capacity;
+  int size;
 
-class heap
-{
-    public:
-    int* arr;
-    int index;
-    int size;
+  void heapifyDown(int index) {
+    int smallest = index;
+    int left = 2 * index + 1;
+    int right = 2 * index + 2;
 
-    heap(int s)
-    {
-        size = s;
-        arr = new int[s];
-        index = 0;
+    if (left < size && heap[left] < heap[smallest])
+      smallest = left;
+    if (right < size && heap[right] < heap[smallest])
+      smallest = right;
+
+    if (smallest != index) {
+      swap(heap[index], heap[smallest]);
+      heapifyDown(smallest);
     }
+  }
 
-    void insert(int val)
-    {
-        if (index == size){
-            cout<<"Heap full";
-            return;
-        }
-
-        //insert val at end
-        int i = index;
-        arr[index] = val;
-
-        while(i > 0){
-            int parent = (i-1)/2;
-            if (arr[parent] < arr[i]){
-                swap(arr[parent], arr[i]);
-                i = parent;
-            }
-            else{
-                break;
-            }
-        }
-        index++;
-        cout<<"inserted "<<val<<endl;
+  void heapifyUp(int index) {
+    int parent = (index - 1) / 2;
+    if (index > 0 && heap[index] < heap[parent]) {
+      swap(heap[index], heap[parent]);
+      heapifyUp(parent);
     }
+  }
 
-    void print()
-    {
-        for (int i=0;i<index;i++){
-            cout<<arr[i]<<" ";
-        }
+public:
+  MinHeap(int cap) : capacity(cap), size(0) { heap = new int[capacity]; }
+
+  ~MinHeap() { delete[] heap; }
+
+  void insert(int val) {
+    if (size == capacity) {
+      cout << "Heap overflow. Cannot insert." << endl;
+      return;
     }
+    heap[size] = val;
+    heapifyUp(size);
+    size++;
+  }
 
-    void del()
-    {   
-        if (index == 0){
-            cout<<"Empty heap";
-        }
+  int extractMin() {
+    if (size == 0)
+      return INT_MAX;
+    int root = heap[0];
+    heap[0] = heap[size - 1];
+    size--;
+    heapifyDown(0);
+    return root;
+  }
 
-        index--;
-        arr[0] = arr[index];
-
-        int i = 0;
-        while(i < index){
-            int left = (i * 2) + 1;
-            int right = (i * 2) + 2;
-            int largest = i;
-
-            if (left < index && arr[left] > arr[largest]){
-                largest = left;
-            }
-            if (right < index && arr[right] > arr[largest]){
-                largest = right;
-            }
-
-            if (largest != i){
-                swap(arr[largest], arr[i]);
-                i = largest;
-            }
-            else{
-                break;
-            }
-        }
+  void print() {
+    for (int i = 0; i < size; i++) {
+      cout << heap[i] << " ";
     }
-
-    void minHeapify(int i)
-    {
-        while(i < index){
-            int left = (i*2)+1;
-            int right = (i*2)+2;
-            int smallest = i;
-
-            if (left < index && arr[i] > arr[left]){
-                smallest = left;
-            }
-            if (right < index && arr[i] > arr[right]){
-                smallest = right;
-            }
-
-            if (smallest != i){
-                swap(arr[i], arr[smallest]);
-                minHeapify(smallest);
-            }
-            
-        }
-    }
+    cout << endl;
+  }
 };
 
+class MaxHeap {
+  int *heap;
+  int capacity;
+  int size;
 
+  void heapifyDown(int index) {
+    int largest = index;
+    int left = 2 * index + 1;
+    int right = 2 * index + 2;
 
-int main()
-{
-    heap h(8);
-    h.insert(25);
-    h.insert(10);
-    h.insert(35);
-    h.insert(5);
-    h.insert(30);
-    h.insert(20);
-    h.insert(15);
-    h.insert(40);
+    if (left < size && heap[left] > heap[largest])
+      largest = left;
+    if (right < size && heap[right] > heap[largest])
+      largest = right;
 
-    h.print();
-    cout<<endl;
+    if (largest != index) {
+      swap(heap[index], heap[largest]);
+      heapifyDown(largest);
+    }
+  }
 
-    // h.del();
-    // h.print();
+  void heapifyUp(int index) {
+    int parent = (index - 1) / 2;
+    if (index > 0 && heap[index] > heap[parent]) {
+      swap(heap[index], heap[parent]);
+      heapifyUp(parent);
+    }
+  }
 
-    // for (int i=(h.index/2-1);i>0;i++){
-    //     h.minHeapify(i);
-    // }
-    h.print();
+public:
+  MaxHeap(int cap) : capacity(cap), size(0) { heap = new int[capacity]; }
 
+  ~MaxHeap() { delete[] heap; }
 
-    return 0;
-}
+  void insert(int val) {
+    if (size == capacity) {
+      cout << "Heap overflow. Cannot insert." << endl;
+      return;
+    }
+    heap[size] = val;
+    heapifyUp(size);
+    size++;
+  }
 
+  int extractMax() {
+    if (size == 0)
+      return INT_MIN;
+    int root = heap[0];
+    heap[0] = heap[size - 1];
+    size--;
+    heapifyDown(0);
+    return root;
+  }
+
+  void print() {
+    for (int i = 0; i < size; i++) {
+      cout << heap[i] << " ";
+    }
+    cout << endl;
+  }
+};
