@@ -42,7 +42,7 @@ class graph
         int visited[maxv] = {false};
         // cout<<"Starting vertex: "<<start;
 
-        dfsUtil(start,visited);
+        dfsUtil(start,visited);  
 
     }
 
