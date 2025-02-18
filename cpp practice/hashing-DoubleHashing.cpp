@@ -18,7 +18,7 @@ class hashTable
     public:   
     element** arr;
     int size = 10;
-
+  
     hashTable(){
         arr = new element*[size]();
         for (int i=0;i<size;i++){
@@ -26,14 +26,14 @@ class hashTable
         }
     }
 
-    int hash1(int k)
-    {
-        return k % size;
-    }
-
     int hash2(int k)
     {
         return (7 - (k % 7));
+    }
+
+    int hash1(int k)
+    {
+        return k % size;
     }
 
     int doubleHashing(int k, int i)
