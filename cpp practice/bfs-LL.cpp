@@ -19,6 +19,11 @@ class graph
     node** adj;
     int v;
 
+    void addEdge(int src, int des)
+    {
+         
+    }
+
     graph(int ver)
     {
         v = ver;
@@ -28,10 +33,7 @@ class graph
         }
     }
 
-    void addEdge(int src, int des)
-    {
-         
-    }
+    
 };  
 
 
