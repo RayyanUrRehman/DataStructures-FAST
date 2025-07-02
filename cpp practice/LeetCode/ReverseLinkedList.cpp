@@ -11,10 +11,32 @@
 class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
-        ListNode* current = head;
-        ListNode* nextNode = hwhead.next;
-        while(nextNode!=NULL){
-            
+
+       if(head==NULL){
+            return head;
         }
+        ListNode* current = head;
+        ListNode* nextNode = head->next;
+        int num=0;
+        
+        while(current!=NULL){
+            current = current->next;
+            num++;
+        }
+        int* arr = new int[num];
+        int count=num;
+        current = head;
+        while(current!=NULL){
+            arr[count-1] = current->val;
+            count--;
+            current = current->next;
+        }
+        current=head;
+        while(current!=NULL){
+            current->val = arr[count];
+            current = current->next;
+            count++;
+        }
+        return head;
     }
 };
