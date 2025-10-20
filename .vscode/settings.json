@@ -6,6 +6,7 @@
         "xstring": "cpp",
         "xutility": "cpp",
         "xmemory": "cpp",
-        "ratio": "cpp"
+        "ratio": "cpp",
+        "utility": "cpp"
     }
 }
