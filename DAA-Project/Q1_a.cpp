@@ -4,22 +4,22 @@ using namespace std;
 
 int comparisonCount = 0; 
 
-pair<int, int> findMinMax(int arr[], int low, int high) {
-    if (low == high) {
-        return {arr[low], arr[low]};
+pair<int, int> findMinMax(int arr[], int min, int max) {
+    if (min == max) {
+        return {arr[min], arr[min]};
     }
 
-    if (high == low + 1) {
+    if (max == min + 1) {
         comparisonCount++;
-        if (arr[low] < arr[high])
-            return {arr[low], arr[high]};
+        if (arr[min] < arr[max])
+            return {arr[min], arr[max]};
         else
-            return {arr[high], arr[low]};
+            return {arr[max], arr[min]};
     }
 
-    int mid = (low + high) / 2;
-    pair<int, int> left = findMinMax(arr, low, mid);
-    pair<int, int> right = findMinMax(arr, mid + 1, high);
+    int mid = (min + max) / 2;
+    pair<int, int> left = findMinMax(arr, min, mid);
+    pair<int, int> right = findMinMax(arr, mid + 1, max);
 
     comparisonCount++;
     int overallMin = (left.first < right.first) ? left.first : right.first;
